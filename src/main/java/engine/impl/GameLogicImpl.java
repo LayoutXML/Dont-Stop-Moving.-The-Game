@@ -1,29 +1,84 @@
 package engine.impl;
 
 import engine.GameLogic;
-import engine.graphics.Mesh;
 import engine.RenderEngine;
 import engine.Window;
+import engine.graphics.Mesh;
 import model.GameItem;
+import model.Texture;
 import model.exceptions.InitializationException;
+import model.exceptions.ResourceException;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public class GameLogicImpl implements GameLogic {
 
     private final float[] positions = new float[]{
-            -0.5f, 0.5f, 0.0f,
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-            0.5f, 0.5f, 0.0f
+            -0.5f, 0.5f, 0.5f,
+            -0.5f, -0.5f, 0.5f,
+            0.5f, -0.5f, 0.5f,
+            0.5f, 0.5f, 0.5f,
+            -0.5f, 0.5f, -0.5f,
+            0.5f, 0.5f, -0.5f,
+            -0.5f, -0.5f, -0.5f,
+            0.5f, -0.5f, -0.5f,
+
+            -0.5f, 0.5f, -0.5f,
+            0.5f, 0.5f, -0.5f,
+            -0.5f, 0.5f, 0.5f,
+            0.5f, 0.5f, 0.5f,
+
+            0.5f, 0.5f, 0.5f,
+            0.5f, -0.5f, 0.5f,
+
+            -0.5f, 0.5f, 0.5f,
+            -0.5f, -0.5f, 0.5f,
+
+            -0.5f, -0.5f, -0.5f,
+            0.5f, -0.5f, -0.5f,
+            -0.5f, -0.5f, 0.5f,
+            0.5f, -0.5f, 0.5f
     };
-    private final float[] colors = new float[]{
-            0.5f, 0.0f, 0.0f,
-            0.0f, 0.5f, 0.0f,
-            0.0f, 0.0f, 0.5f,
-            0.0f, 0.5f, 0.5f
+    private final float[] texture = new float[]{
+            0.0f, 0.0f,
+            0.0f, 0.5f,
+            0.5f, 0.5f,
+            0.5f, 0.0f,
+
+            0.0f, 0.0f,
+            0.5f, 0.0f,
+            0.0f, 0.5f,
+            0.5f, 0.5f,
+
+            0.0f, 0.5f,
+            0.5f, 0.5f,
+            0.0f, 1.0f,
+            0.5f, 1.0f,
+
+            0.0f, 0.0f,
+            0.0f, 0.5f,
+
+            0.5f, 0.0f,
+            0.5f, 0.5f,
+
+            0.5f, 0.0f,
+            1.0f, 0.0f,
+            0.5f, 0.5f,
+            1.0f, 0.5f
     };
-    private final int[] indexes = new int[]{0, 1, 3, 3, 1, 2};
+    private final int[] indexes = new int[]{
+            0, 1, 3, 3, 1, 2,
+
+            8, 10, 11, 9, 8, 11,
+
+            12, 13, 7, 5, 12, 7,
+
+            14, 15, 6, 4, 14, 6,
+
+            16, 18, 19, 17, 16, 19,
+
+            4, 6, 7, 5, 4, 7
+    };
 
     private int forwardDirection = 0;
     private int sidewaysDirection = 0;
@@ -33,9 +88,10 @@ public class GameLogicImpl implements GameLogic {
     private GameItem[] gameItems;
 
     @Override
-    public void initialize(Window window) throws InitializationException {
+    public void initialize(Window window) throws InitializationException, ResourceException {
         renderEngine.initialize(window);
-        Mesh mesh = new Mesh(positions, colors, indexes);
+        Texture texture = new Texture("src/textures/test.png");
+        Mesh mesh = new Mesh(positions, this.texture, indexes, texture);
         GameItem gameItem = new GameItem(mesh);
         gameItem.setPositionFromCoordinates(0, 0, -2);
         gameItems = new GameItem[]{gameItem};
@@ -84,11 +140,11 @@ public class GameLogicImpl implements GameLogic {
             gameItem.moveVerticallyByIncrement(verticalDirection);
             gameItem.scaleByIncrement(scale);
 
-            float rotation = gameItem.getRotation().z + 1.5f;
+            float rotation = gameItem.getRotation().x + 1.5f;
             if (rotation > 360) {
                 rotation = 0;
             }
-            gameItem.setRotationFromCoordinates(0, 0, rotation);
+            gameItem.setRotationFromCoordinates(rotation, rotation, rotation);
         }
     }
 

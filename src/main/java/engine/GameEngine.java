@@ -1,6 +1,7 @@
 package engine;
 
 import model.exceptions.InitializationException;
+import model.exceptions.ResourceException;
 import utils.TimerUtils;
 
 public class GameEngine implements Runnable {
@@ -27,13 +28,13 @@ public class GameEngine implements Runnable {
         try {
             initialize();
             loop();
-        } catch (InitializationException exception) {
+        } catch (InitializationException | ResourceException exception) {
             exception.printStackTrace();
         }
         free();
     }
 
-    private void initialize() throws InitializationException {
+    private void initialize() throws InitializationException, ResourceException {
         window.initialize();
         timerUtils.initialize();
         gameLogic.initialize(window);
@@ -61,10 +62,6 @@ public class GameEngine implements Runnable {
         }
     }
 
-    private void free() {
-        gameLogic.free();
-    }
-
     private void input() {
         gameLogic.input(window);
     }
@@ -87,5 +84,9 @@ public class GameEngine implements Runnable {
             } catch (InterruptedException ignored) {
             }
         }
+    }
+
+    private void free() {
+        gameLogic.free();
     }
 }

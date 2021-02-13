@@ -64,6 +64,8 @@ public class Window {
         GL.createCapabilities();
 
         setClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+        glEnable(GL_DEPTH_TEST);
     }
 
     public void setClearColor(float red, float green, float blue, float alpha) {

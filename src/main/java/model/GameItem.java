@@ -10,12 +10,13 @@ import org.joml.Vector3f;
 @Setter
 @RequiredArgsConstructor
 public class GameItem {
+    private final float MOVEMENT_MULTIPLIER = 0.1f;
+    private final float SCALE_MULTIPLIER = 0.01f;
+
+    private float scale = 1;
     private final Mesh mesh;
     private final Vector3f position = new Vector3f();
     private final Vector3f rotation = new Vector3f();
-    private float scale = 1;
-    private final float movementMultiplier = 0.1f;
-    private final float scaleMultiplier = 0.01f;
 
     public void setPositionFromCoordinates(float x, float y, float z) {
         this.position.x = x;
@@ -30,22 +31,22 @@ public class GameItem {
     }
 
     public void moveForwardByIncrement(int increment) {
-        position.y += movementMultiplier * increment;
+        position.y += MOVEMENT_MULTIPLIER * increment;
     }
 
     public void moveSidewaysByIncrement(int increment) {
-        position.x += movementMultiplier * increment;
+        position.x += MOVEMENT_MULTIPLIER * increment;
     }
 
     public void moveVerticallyByIncrement(int increment) {
-        position.z += movementMultiplier * increment;
+        position.z += MOVEMENT_MULTIPLIER * increment;
     }
 
     public void scaleByIncrement(int increment) {
         float scale = this.scale;
-        scale += scaleMultiplier * increment;
-        if (scale <= scaleMultiplier) {
-            scale = scaleMultiplier;
+        scale += SCALE_MULTIPLIER * increment;
+        if (scale <= SCALE_MULTIPLIER) {
+            scale = SCALE_MULTIPLIER;
         }
         this.scale = scale;
     }

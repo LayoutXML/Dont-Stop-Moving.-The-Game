@@ -4,6 +4,7 @@ import engine.graphics.Shaders;
 import engine.graphics.Transformation;
 import model.GameItem;
 import model.exceptions.InitializationException;
+import model.exceptions.ResourceException;
 import org.joml.Matrix4f;
 import utils.ResourceUtils;
 
@@ -17,7 +18,7 @@ public class RenderEngine {
     private final Transformation transformation = new Transformation();
     private Shaders shaders;
 
-    public void initialize(Window window) throws InitializationException {
+    public void initialize(Window window) throws InitializationException, ResourceException {
         shaders = new Shaders();
         shaders.createVertexShader(ResourceUtils.loadResource("/vertex.vs"));
         shaders.createFragmentShader(ResourceUtils.loadResource("/fragment.fs"));
@@ -25,6 +26,7 @@ public class RenderEngine {
 
         shaders.createUniform("projection");
         shaders.createUniform("world");
+        shaders.createUniform("sampler");
 
         window.setClearColor(0f, 0f, 0f, 0f);
     }
@@ -41,6 +43,7 @@ public class RenderEngine {
 
         Matrix4f projection = transformation.getProjectionWithPerspective(FIELD_OF_VIEW, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
         shaders.setUniform("projection", projection);
+        shaders.setUniform("sampler", 0);
 
         for (GameItem gameItem : gameItems) {
             Matrix4f world = transformation.getWorldWithRotationAndScale(gameItem.getPosition(), gameItem.getRotation(), gameItem.getScale());

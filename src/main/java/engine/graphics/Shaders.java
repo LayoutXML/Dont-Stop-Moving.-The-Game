@@ -4,6 +4,7 @@ import model.exceptions.InitializationException;
 import org.joml.Matrix4f;
 import org.lwjgl.system.MemoryStack;
 
+import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ public class Shaders {
     private final int programId;
     private int vertexShaderId;
     private int fragmentShaderId;
-    private final Map<String, Integer> uniforms = new HashMap<>();
+    private final Map<String, Integer> uniformLocations = new HashMap<>();
 
     public Shaders() throws InitializationException {
         programId = glCreateProgram();
@@ -54,13 +55,22 @@ public class Shaders {
         if (uniformLocation < 0) {
             throw new InitializationException("IE8");
         }
-        uniforms.put(name, uniformLocation);
+
+        uniformLocations.put(name, uniformLocation);
     }
 
     public void setUniform(String name, Matrix4f matrix4f) {
         try (MemoryStack memoryStack = MemoryStack.stackPush()) {
-            glUniformMatrix4fv(uniforms.get(name), false, matrix4f.get(memoryStack.mallocFloat(16)));
+            int location = uniformLocations.get(name);
+            FloatBuffer floatBuffer = matrix4f.get(memoryStack.mallocFloat(16));
+            glUniformMatrix4fv(location, false, floatBuffer);
+        } catch (Exception ignored) {
         }
+    }
+
+    public void setUniform(String name, int value) {
+        int location = uniformLocations.get(name);
+        glUniform1i(location, 0);
     }
 
     public void link() throws InitializationException {
@@ -75,11 +85,6 @@ public class Shaders {
 
         if (fragmentShaderId != 0) {
             glDetachShader(programId, fragmentShaderId);
-        }
-
-        glValidateProgram(programId);
-        if (glGetProgrami(programId, GL_VALIDATE_STATUS) == 0) {
-            System.err.println("W1");
         }
     }
 
