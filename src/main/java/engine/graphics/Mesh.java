@@ -4,7 +4,6 @@ import lombok.Getter;
 import model.Texture;
 import org.lwjgl.system.MemoryUtil;
 
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ public class Mesh {
     private final int vertexCount;
     private final Texture texture;
 
-    public Mesh(float[] positions, float[] textture, int[] indexes, Texture texture) {
+    public Mesh(float[] positions, float[] textureCoordinates, int[] indexes, Texture texture) {
         this.texture = texture;
 
         vertexCount = indexes.length;
@@ -30,7 +29,7 @@ public class Mesh {
         glBindVertexArray(vertexArraysId);
 
         setupPositionBufferObject(positions);
-        setupTextureBufferObject(textture);
+        setupTextureBufferObject(textureCoordinates);
         setupIndexBufferObject(indexes);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -52,12 +51,12 @@ public class Mesh {
         MemoryUtil.memFree(positionBuffer);
     }
 
-    private void setupTextureBufferObject(float[] texture) {
+    private void setupTextureBufferObject(float[] textureCoordinates) {
         int bufferId = glGenBuffers();
         bufferIdList.add(bufferId);
 
-        FloatBuffer textureBuffer = MemoryUtil.memAllocFloat(texture.length);
-        textureBuffer.put(texture).flip();
+        FloatBuffer textureBuffer = MemoryUtil.memAllocFloat(textureCoordinates.length);
+        textureBuffer.put(textureCoordinates).flip();
         glBindBuffer(GL_ARRAY_BUFFER, bufferId);
         glBufferData(GL_ARRAY_BUFFER, textureBuffer, GL_STATIC_DRAW);
 
@@ -79,22 +78,22 @@ public class Mesh {
         MemoryUtil.memFree(indexBuffer);
     }
 
-    public void free() {
-        glDisableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        for (int bufferId: bufferIdList) {
-            glDeleteBuffers(bufferId);
-        }
-        texture.free();
-        glBindVertexArray(0);
-        glDeleteVertexArrays(vertexArraysId);
-    }
-
     public void render() {
         glActiveTexture(GL_TEXTURE);
         glBindTexture(GL_TEXTURE_2D, texture.getId());
         glBindVertexArray(vertexArraysId);
         glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
+    }
+
+    public void free() {
+        glDisableVertexAttribArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        for (int bufferId : bufferIdList) {
+            glDeleteBuffers(bufferId);
+        }
+        texture.free();
+        glBindVertexArray(0);
+        glDeleteVertexArrays(vertexArraysId);
     }
 }

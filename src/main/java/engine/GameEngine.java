@@ -9,6 +9,7 @@ public class GameEngine implements Runnable {
     public static final int TICK_RATE = 30;
 
     private final TimerUtils timerUtils = new TimerUtils();
+    private final InputManager inputManager = new InputManager();
     private final Window window;
     private final GameLogic gameLogic;
 
@@ -37,6 +38,7 @@ public class GameEngine implements Runnable {
     private void initialize() throws InitializationException, ResourceException {
         window.initialize();
         timerUtils.initialize();
+        inputManager.initialize(window);
         gameLogic.initialize(window);
     }
 
@@ -63,11 +65,12 @@ public class GameEngine implements Runnable {
     }
 
     private void input() {
-        gameLogic.input(window);
+        gameLogic.input(inputManager, window);
+        inputManager.mouseInput();
     }
 
     private void update(float updateInterval) {
-        gameLogic.update(updateInterval);
+        gameLogic.update(inputManager, updateInterval);
     }
 
     private void render() {
@@ -80,7 +83,7 @@ public class GameEngine implements Runnable {
         double endTime = timerUtils.getPreviousLoopTime() + frameTime;
         while (timerUtils.getTimeInSeconds() < endTime) {
             try {
-                Thread.sleep(1);
+                Thread.sleep(1); // TODO maybe try to set actual time
             } catch (InterruptedException ignored) {
             }
         }

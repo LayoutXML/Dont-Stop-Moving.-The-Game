@@ -66,14 +66,12 @@ public class Window {
         setClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
         glEnable(GL_DEPTH_TEST);
+
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
 
     public void setClearColor(float red, float green, float blue, float alpha) {
         glClearColor(red, green, blue, alpha);
-    }
-
-    public boolean isKeyPressed(int key) {
-        return GLFW_PRESS == glfwGetKey(windowId, key);
     }
 
     public boolean windowShouldClose() {

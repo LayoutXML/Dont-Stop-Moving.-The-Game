@@ -12,8 +12,8 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class RenderEngine {
     private static final float FIELD_OF_VIEW = (float) Math.toRadians(70d);
-    private static final float Z_NEAR = 0.01f;
     private static final float Z_FAR = 1000f;
+    private static final float Z_NEAR = 0.01f;
 
     private final Transformation transformation = new Transformation();
     private Shaders shaders;
@@ -25,13 +25,11 @@ public class RenderEngine {
         shaders.link();
 
         shaders.createUniform("projection");
-        shaders.createUniform("world");
+        shaders.createUniform("models");
         shaders.createUniform("sampler");
-
-        window.setClearColor(0f, 0f, 0f, 0f);
     }
 
-    public void render(Window window, GameItem[] gameItems) {
+    public void render(Window window, Camera camera, GameItem[] gameItems) {
         clear();
 
         if (window.isResized()) {
@@ -45,9 +43,11 @@ public class RenderEngine {
         shaders.setUniform("projection", projection);
         shaders.setUniform("sampler", 0);
 
+        Matrix4f view = transformation.getCameraView(camera);
+
         for (GameItem gameItem : gameItems) {
-            Matrix4f world = transformation.getWorldWithRotationAndScale(gameItem.getPosition(), gameItem.getRotation(), gameItem.getScale());
-            shaders.setUniform("world", world);
+            Matrix4f world = transformation.getModelView(gameItem, view);
+            shaders.setUniform("models", world);
             gameItem.getMesh().render(); // TODO move rendering to gameitem
         }
 

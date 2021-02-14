@@ -1,21 +1,41 @@
 package engine.graphics;
 
+import engine.Camera;
+import model.GameItem;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class Transformation {
     private final Matrix4f projection = new Matrix4f();
-    private final Matrix4f world = new Matrix4f();
+    private final Matrix4f modelView = new Matrix4f();
+    private final Matrix4f view = new Matrix4f();
 
     public Matrix4f getProjectionWithPerspective(float fov, float width, float height, float zNear, float zFar) {
         return projection.setPerspective(fov, width / height, zNear, zFar);
     }
 
-    public Matrix4f getWorldWithRotationAndScale(Vector3f offset, Vector3f rotation, float scale) {
-        return world.identity().translation(offset)
-                .rotateX((float) Math.toRadians(rotation.x))
-                .rotateY((float) Math.toRadians(rotation.y))
-                .rotateZ((float) Math.toRadians(rotation.z))
+    public Matrix4f getModelView(GameItem gameItem, Matrix4f view) {
+        Vector3f rotation = gameItem.getRotation();
+        Vector3f position = gameItem.getPosition();
+        float scale = gameItem.getScale();
+
+        modelView.identity().translation(position)
+                .rotateX((float) Math.toRadians(-rotation.x))
+                .rotateY((float) Math.toRadians(-rotation.y))
+                .rotateZ((float) Math.toRadians(-rotation.z))
                 .scale(scale);
+
+        Matrix4f viewCopy = new Matrix4f(view);
+        return viewCopy.mul(modelView);
+    }
+
+    public Matrix4f getCameraView(Camera camera) {
+        Vector3f position = camera.getPosition();
+        Vector3f rotation = camera.getRotation();
+
+        return view.identity()
+                .rotate((float) Math.toRadians(rotation.x), new Vector3f(1, 0, 0))
+                .rotate((float) Math.toRadians(rotation.y), new Vector3f(0, 1, 0))
+                .translate(-position.x, -position.y, -position.z);
     }
 }

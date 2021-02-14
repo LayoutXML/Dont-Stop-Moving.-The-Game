@@ -1,7 +1,6 @@
 package model;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import model.exceptions.ResourceException;
 import org.lwjgl.system.MemoryStack;
 
