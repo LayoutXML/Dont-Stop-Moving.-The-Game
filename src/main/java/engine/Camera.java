@@ -1,9 +1,12 @@
 package engine;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.joml.Vector3f;
 
 @Getter
+@NoArgsConstructor
 public class Camera {
     private final float MOVEMENT_MULTIPLIER = 0.1f;
     private final float SCALE_MULTIPLIER = 0.01f;

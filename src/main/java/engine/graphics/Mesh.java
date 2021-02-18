@@ -1,7 +1,9 @@
 package engine.graphics;
 
 import lombok.Getter;
+import lombok.Setter;
 import model.Texture;
+import org.joml.Vector3f;
 import org.lwjgl.system.MemoryUtil;
 
 import java.nio.FloatBuffer;
@@ -14,15 +16,18 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
 @Getter
+@Setter
 public class Mesh {
+    private final Vector3f DEFAULT_COLOR = new Vector3f(1f, 1f, 1f);
+
     private final int vertexArraysId;
     private final List<Integer> bufferIdList = new ArrayList<>();
     private final int vertexCount;
-    private final Texture texture;
+    private Texture texture;
+    private Vector3f color;
 
-    public Mesh(float[] positions, float[] textureCoordinates, int[] indexes, Texture texture) {
-        this.texture = texture;
-
+    public Mesh(float[] positions, float[] textureCoordinates, float[] normals, int[] indexes) {
+        color = DEFAULT_COLOR;
         vertexCount = indexes.length;
 
         vertexArraysId = glGenVertexArrays();
@@ -30,6 +35,7 @@ public class Mesh {
 
         setupPositionBufferObject(positions);
         setupTextureBufferObject(textureCoordinates);
+        setupNormalBufferObject(normals);
         setupIndexBufferObject(indexes);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -66,6 +72,21 @@ public class Mesh {
         MemoryUtil.memFree(textureBuffer);
     }
 
+    private void setupNormalBufferObject(float[] normals) {
+        int bufferId = glGenBuffers();
+        bufferIdList.add(bufferId);
+
+        FloatBuffer normalBuffer = MemoryUtil.memAllocFloat(normals.length);
+        normalBuffer.put(normals).flip();
+        glBindBuffer(GL_ARRAY_BUFFER, bufferId);
+        glBufferData(GL_ARRAY_BUFFER, normalBuffer, GL_STATIC_DRAW);
+
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 3, GL_FLOAT, false, 0, 0);
+
+        MemoryUtil.memFree(normalBuffer);
+    }
+
     private void setupIndexBufferObject(int[] indexes) {
         int bufferId = glGenBuffers();
         bufferIdList.add(bufferId);
@@ -79,21 +100,35 @@ public class Mesh {
     }
 
     public void render() {
-        glActiveTexture(GL_TEXTURE);
-        glBindTexture(GL_TEXTURE_2D, texture.getId());
+        if (texture != null) {
+            glActiveTexture(GL_TEXTURE);
+            glBindTexture(GL_TEXTURE_2D, texture.getId());
+        }
+
         glBindVertexArray(vertexArraysId);
         glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
+
         glBindVertexArray(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     public void free() {
         glDisableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+
         for (int bufferId : bufferIdList) {
             glDeleteBuffers(bufferId);
         }
-        texture.free();
+
+        if (texture != null) {
+            texture.free();
+        }
+
         glBindVertexArray(0);
         glDeleteVertexArrays(vertexArraysId);
+    }
+
+    public boolean hasTexture() {
+        return texture != null;
     }
 }

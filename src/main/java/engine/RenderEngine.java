@@ -27,6 +27,8 @@ public class RenderEngine {
         shaders.createUniform("projection");
         shaders.createUniform("models");
         shaders.createUniform("sampler");
+        shaders.createUniform("color");
+        shaders.createUniform("useColor");
     }
 
     public void render(Window window, Camera camera, GameItem[] gameItems) {
@@ -48,6 +50,8 @@ public class RenderEngine {
         for (GameItem gameItem : gameItems) {
             Matrix4f world = transformation.getModelView(gameItem, view);
             shaders.setUniform("models", world);
+            shaders.setUniform("color", gameItem.getMesh().getColor());
+            shaders.setUniform("useColor", gameItem.getMesh().hasTexture() ? 0 : 1);
             gameItem.getMesh().render(); // TODO move rendering to gameitem
         }
 

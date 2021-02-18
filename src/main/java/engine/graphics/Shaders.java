@@ -2,6 +2,7 @@ package engine.graphics;
 
 import model.exceptions.InitializationException;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.FloatBuffer;
@@ -70,7 +71,12 @@ public class Shaders {
 
     public void setUniform(String name, int value) {
         int location = uniformLocations.get(name);
-        glUniform1i(location, 0);
+        glUniform1i(location, value);
+    }
+
+    public void setUniform(String name, Vector3f value) {
+        int location = uniformLocations.get(name);
+        glUniform3f(location, value.x, value.y, value.z);
     }
 
     public void link() throws InitializationException {

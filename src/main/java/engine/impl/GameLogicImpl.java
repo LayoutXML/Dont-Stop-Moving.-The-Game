@@ -13,72 +13,6 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class GameLogicImpl implements GameLogic {
 
-    private final float[] positions = new float[]{
-            -0.5f, 0.5f, 0.5f,
-            -0.5f, -0.5f, 0.5f,
-            0.5f, -0.5f, 0.5f,
-            0.5f, 0.5f, 0.5f,
-            -0.5f, 0.5f, -0.5f,
-            0.5f, 0.5f, -0.5f,
-            -0.5f, -0.5f, -0.5f,
-            0.5f, -0.5f, -0.5f,
-
-            -0.5f, 0.5f, -0.5f,
-            0.5f, 0.5f, -0.5f,
-            -0.5f, 0.5f, 0.5f,
-            0.5f, 0.5f, 0.5f,
-
-            0.5f, 0.5f, 0.5f,
-            0.5f, -0.5f, 0.5f,
-
-            -0.5f, 0.5f, 0.5f,
-            -0.5f, -0.5f, 0.5f,
-
-            -0.5f, -0.5f, -0.5f,
-            0.5f, -0.5f, -0.5f,
-            -0.5f, -0.5f, 0.5f,
-            0.5f, -0.5f, 0.5f
-    };
-    private final float[] textureCoordinates = new float[]{
-            0.0f, 0.0f,
-            0.0f, 0.5f,
-            0.5f, 0.5f,
-            0.5f, 0.0f,
-
-            0.0f, 0.0f,
-            0.5f, 0.0f,
-            0.0f, 0.5f,
-            0.5f, 0.5f,
-
-            0.0f, 0.5f,
-            0.5f, 0.5f,
-            0.0f, 1.0f,
-            0.5f, 1.0f,
-
-            0.0f, 0.0f,
-            0.0f, 0.5f,
-
-            0.5f, 0.0f,
-            0.5f, 0.5f,
-
-            0.5f, 0.0f,
-            1.0f, 0.0f,
-            0.5f, 0.5f,
-            1.0f, 0.5f
-    };
-    private final int[] indexes = new int[]{
-            0, 1, 3, 3, 1, 2,
-
-            8, 10, 11, 9, 8, 11,
-
-            12, 13, 7, 5, 12, 7,
-
-            14, 15, 6, 4, 14, 6,
-
-            16, 18, 19, 17, 16, 19,
-
-            4, 6, 7, 5, 4, 7
-    };
     private final float MOUSE_SENSITIVITY = 0.1f;
     private final float CAMERA_POSITION_STEP = 0.1f;
 
@@ -95,14 +29,19 @@ public class GameLogicImpl implements GameLogic {
         }
 
         renderEngine.initialize(window);
+
         Texture texture = new Texture("src/textures/grassblock.png");
-        Mesh mesh = new Mesh(positions, textureCoordinates, indexes, texture);
+        Mesh mesh = OBJLoader.loadMesh("/cube.obj");
+        mesh.setTexture(texture);
 
         GameItem gameItem = new GameItem(mesh);
+        gameItem.setScale(0.5f);
         gameItem.setPositionFromCoordinates(0, 0, -4);
         GameItem gameItem1 = new GameItem(mesh);
+        gameItem1.setScale(0.5f);
         gameItem1.setPositionFromCoordinates(1, 1, -4);
         GameItem gameItem2 = new GameItem(mesh);
+        gameItem2.setScale(0.5f);
         gameItem2.setPositionFromCoordinates(0, 0, -5);
 
         gameItems = new GameItem[]{gameItem, gameItem1, gameItem2};

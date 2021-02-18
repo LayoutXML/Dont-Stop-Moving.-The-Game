@@ -33,8 +33,8 @@ public class Texture {
         ByteBuffer byteBuffer;
 
         try (MemoryStack memoryStack = MemoryStack.stackPush()) {
-            xBuffer = memoryStack.mallocInt(1);
-            yBuffer = memoryStack.mallocInt(1);
+            xBuffer = memoryStack.mallocInt(2);
+            yBuffer = memoryStack.mallocInt(2);
             channelsBuffer = memoryStack.mallocInt(1);
 
             byteBuffer = stbi_load(fileName, xBuffer, yBuffer, channelsBuffer, 4);
@@ -54,7 +54,7 @@ public class Texture {
 
     public void bind() throws ResourceException {
         if (id == 0) {
-            throw new ResourceException("RE3");
+            throw new ResourceException("RE4");
         }
         glBindTexture(GL_TEXTURE_2D, id);
     }

@@ -67,7 +67,7 @@ public class Window {
 
         glEnable(GL_DEPTH_TEST);
 
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
 
     public void setClearColor(float red, float green, float blue, float alpha) {
