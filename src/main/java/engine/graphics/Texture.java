@@ -1,4 +1,4 @@
-package model;
+package engine.graphics;
 
 import lombok.Getter;
 import model.exceptions.ResourceException;

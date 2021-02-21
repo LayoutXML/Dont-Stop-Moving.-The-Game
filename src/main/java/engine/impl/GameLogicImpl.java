@@ -1,9 +1,14 @@
 package engine.impl;
 
 import engine.*;
+import engine.graphics.Material;
 import engine.graphics.Mesh;
+import engine.lights.Attenuation;
+import engine.lights.DirectionalLight;
+import engine.lights.PointLight;
+import engine.lights.SpotLight;
 import model.GameItem;
-import model.Texture;
+import engine.graphics.Texture;
 import model.exceptions.InitializationException;
 import model.exceptions.ResourceException;
 import org.joml.Vector2f;
@@ -22,6 +27,14 @@ public class GameLogicImpl implements GameLogic {
 
     private GameItem[] gameItems;
 
+    private Vector3f ambientLight = new Vector3f(0.3f, 0.3f, 0.3f);
+    private PointLight[] pointLights;
+    private SpotLight[] spotLights;
+    private DirectionalLight directionalLight;
+    private float lightAngle = -90;
+    private float spotLightAngle = 0;
+    private float spotIncrement = 1;
+
     @Override
     public void initialize(Window window) throws InitializationException, ResourceException {
         if (window == null) {
@@ -32,7 +45,10 @@ public class GameLogicImpl implements GameLogic {
 
         Texture texture = new Texture("src/textures/grassblock.png");
         Mesh mesh = OBJLoader.loadMesh("/cube.obj");
-        mesh.setTexture(texture);
+        Material material = new Material();
+        material.setTexture(texture);
+        material.setReflectance(1f);
+        mesh.setMaterial(material);
 
         GameItem gameItem = new GameItem(mesh);
         gameItem.setScale(0.5f);
@@ -45,6 +61,21 @@ public class GameLogicImpl implements GameLogic {
         gameItem2.setPositionFromCoordinates(0, 0, -5);
 
         gameItems = new GameItem[]{gameItem, gameItem1, gameItem2};
+
+        // TODO: refactor
+        Vector3f lightPosition = new Vector3f(1, 1, 1);
+        PointLight pointLight = new PointLight(lightPosition, new Vector3f(0, 0, 1), 1f, new Attenuation(0f, 0f, 1f));
+        pointLights = new PointLight[]{pointLight};
+
+        lightPosition = new Vector3f(0, 0.0f, 10f);
+        pointLight = new PointLight(new Vector3f(1, 1, 1), lightPosition, 1f, new Attenuation(0f, 0f, 0.02f));
+        Vector3f coneDir = new Vector3f(0, 0, -1);
+        float cutoff = (float) Math.cos(Math.toRadians(140));
+        SpotLight spotLight = new SpotLight(pointLight, coneDir, cutoff);
+        spotLights= new SpotLight[]{spotLight, new SpotLight(spotLight)};
+
+        lightPosition = new Vector3f(-1, 0, 0);
+        directionalLight = new DirectionalLight(new Vector3f(1, 1, 1), lightPosition, 1f);
     }
 
     @Override
@@ -85,7 +116,7 @@ public class GameLogicImpl implements GameLogic {
 
     @Override
     public void render(Window window) {
-        renderEngine.render(window, camera, gameItems);
+        renderEngine.render(window, camera, gameItems, ambientLight, pointLights, spotLights, directionalLight);
     }
 
     @Override

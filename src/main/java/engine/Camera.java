@@ -8,8 +8,6 @@ import org.joml.Vector3f;
 @Getter
 @NoArgsConstructor
 public class Camera {
-    private final float MOVEMENT_MULTIPLIER = 0.1f;
-    private final float SCALE_MULTIPLIER = 0.01f;
 
     private final Vector3f position = new Vector3f();
     private final Vector3f rotation = new Vector3f();
@@ -24,18 +22,6 @@ public class Camera {
         rotation.x = x;
         rotation.y = y;
         rotation.z = z;
-    }
-
-    public void moveForwardByIncrement(int increment) {
-        position.y += MOVEMENT_MULTIPLIER * increment;
-    }
-
-    public void moveSidewaysByIncrement(int increment) {
-        position.x += MOVEMENT_MULTIPLIER * increment;
-    }
-
-    public void moveVerticallyByIncrement(int increment) {
-        position.z += MOVEMENT_MULTIPLIER * increment;
     }
 
     public void movePosition(float x, float y, float z) {

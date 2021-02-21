@@ -2,7 +2,6 @@ package engine.graphics;
 
 import lombok.Getter;
 import lombok.Setter;
-import model.Texture;
 import org.joml.Vector3f;
 import org.lwjgl.system.MemoryUtil;
 
@@ -18,16 +17,13 @@ import static org.lwjgl.opengl.GL30.*;
 @Getter
 @Setter
 public class Mesh {
-    private final Vector3f DEFAULT_COLOR = new Vector3f(1f, 1f, 1f);
 
     private final int vertexArraysId;
     private final List<Integer> bufferIdList = new ArrayList<>();
     private final int vertexCount;
-    private Texture texture;
-    private Vector3f color;
+    private Material material;
 
     public Mesh(float[] positions, float[] textureCoordinates, float[] normals, int[] indexes) {
-        color = DEFAULT_COLOR;
         vertexCount = indexes.length;
 
         vertexArraysId = glGenVertexArrays();
@@ -100,6 +96,7 @@ public class Mesh {
     }
 
     public void render() {
+        Texture texture = material.getTexture();
         if (texture != null) {
             glActiveTexture(GL_TEXTURE);
             glBindTexture(GL_TEXTURE_2D, texture.getId());
@@ -120,8 +117,11 @@ public class Mesh {
             glDeleteBuffers(bufferId);
         }
 
-        if (texture != null) {
-            texture.free();
+        if (material != null) {
+            Texture texture = material.getTexture();
+            if (texture != null) {
+                texture.free();
+            }
         }
 
         glBindVertexArray(0);
@@ -129,6 +129,6 @@ public class Mesh {
     }
 
     public boolean hasTexture() {
-        return texture != null;
+        return material != null && material.getTexture() != null;
     }
 }

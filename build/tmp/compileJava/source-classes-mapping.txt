@@ -1,41 +1,51 @@
-utils/TimerUtils.java
- utils.TimerUtils
+engine/graphics/Texture.java
+ engine.graphics.Texture
 engine/graphics/IndexGroup.java
  engine.graphics.IndexGroup
-engine/graphics/Shaders.java
- engine.graphics.Shaders
-engine/InputManager.java
- engine.InputManager
+engine/graphics/Transformation.java
+ engine.graphics.Transformation
+model/exceptions/InitializationException.java
+ model.exceptions.InitializationException
+engine/graphics/Mesh.java
+ engine.graphics.Mesh
+engine/lights/SpotLight.java
+ engine.lights.SpotLight
+engine/OBJLoader.java
+ engine.OBJLoader
+engine/lights/Attenuation.java
+ engine.lights.Attenuation
+engine/graphics/Face.java
+ engine.graphics.Face
+engine/GameLogic.java
+ engine.GameLogic
+engine/Camera.java
+ engine.Camera
 engine/Window.java
  engine.Window
  engine.Window$WindowBuilder
-model/exceptions/InitializationException.java
- model.exceptions.InitializationException
-engine/GameLogic.java
- engine.GameLogic
-engine/graphics/Face.java
- engine.graphics.Face
-engine/GameEngine.java
- engine.GameEngine
-model/exceptions/ResourceException.java
- model.exceptions.ResourceException
-Main.java
- Main
-engine/Camera.java
- engine.Camera
 utils/ResourceUtils.java
  utils.ResourceUtils
-engine/RenderEngine.java
- engine.RenderEngine
-engine/OBJLoader.java
- engine.OBJLoader
-engine/graphics/Transformation.java
- engine.graphics.Transformation
-engine/graphics/Mesh.java
- engine.graphics.Mesh
-engine/impl/GameLogicImpl.java
- engine.impl.GameLogicImpl
-model/Texture.java
- model.Texture
+engine/lights/PointLight.java
+ engine.lights.PointLight
+engine/GameEngine.java
+ engine.GameEngine
 model/GameItem.java
  model.GameItem
+engine/InputManager.java
+ engine.InputManager
+engine/lights/DirectionalLight.java
+ engine.lights.DirectionalLight
+utils/TimerUtils.java
+ utils.TimerUtils
+model/exceptions/ResourceException.java
+ model.exceptions.ResourceException
+engine/RenderEngine.java
+ engine.RenderEngine
+engine/graphics/Material.java
+ engine.graphics.Material
+engine/graphics/Shaders.java
+ engine.graphics.Shaders
+Main.java
+ Main
+engine/impl/GameLogicImpl.java
+ engine.impl.GameLogicImpl
