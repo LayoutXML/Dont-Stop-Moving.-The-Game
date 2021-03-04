@@ -3,7 +3,6 @@ package engine.impl;
 import engine.*;
 import engine.graphics.Material;
 import engine.graphics.Mesh;
-import engine.lights.Attenuation;
 import engine.lights.DirectionalLight;
 import engine.lights.PointLight;
 import engine.lights.SpotLight;
@@ -14,18 +13,21 @@ import model.exceptions.ResourceException;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.lwjgl.glfw.GLFW.*;
 
 public class GameLogicImpl implements GameLogic {
 
-    private final float MOUSE_SENSITIVITY = 0.1f;
-    private final float CAMERA_POSITION_STEP = 0.1f;
+    private final float MOUSE_SENSITIVITY = 0.3f;
+    private final float MOVEMENT_SPEED = 0.1f;
 
     private final RenderEngine renderEngine = new RenderEngine();
     private final Camera camera = new Camera();
     private final Vector3f cameraMovement = new Vector3f();
 
-    private GameItem[] gameItems;
+    private List<GameItem> gameItems = new ArrayList<>();
 
     private Vector3f ambientLight = new Vector3f(0.3f, 0.3f, 0.3f);
     private PointLight[] pointLights;
@@ -43,38 +45,55 @@ public class GameLogicImpl implements GameLogic {
 
         renderEngine.initialize(window);
 
-        Texture texture = new Texture("src/textures/grassblock.png");
+        Texture texture = new Texture("src/textures/stone_cube.png");
         Mesh mesh = OBJLoader.loadMesh("/cube.obj");
         Material material = new Material();
         material.setTexture(texture);
-        material.setReflectance(1f);
+        material.setReflectance(.1f);
         mesh.setMaterial(material);
 
-        GameItem gameItem = new GameItem(mesh);
+        float[][] mockCoordinates = {
+                {0, -1, -1}, {-1, -1, -1}, {1, -1, -1},
+                {0, -1, -2}, {-1, -1, -2}, {1, -1, -2},
+                {0, -1, -3}, {-1, -1, -3}, {1, -1, -3},
+                {0, -1, -4}, {-1, -1, -4}, {1, -1, -4},
+                {0, -1, -5}, {-1, -1, -5}, {1, -1, -5},
+                {0, 0, -3}
+        };
+        for (float[] mockCoordinate : mockCoordinates) {
+            GameItem gameItem = new GameItem(mesh);
+            gameItem.setScale(0.5f);
+            gameItem.setPositionFromCoordinates(mockCoordinate[0], mockCoordinate[1], mockCoordinate[2]);
+            gameItems.add(gameItem);
+        }
+
+        /*GameItem gameItem = new GameItem(mesh);
         gameItem.setScale(0.5f);
-        gameItem.setPositionFromCoordinates(0, 0, -4);
+        gameItem.setPositionFromCoordinates(0, -1, -1);
+
         GameItem gameItem1 = new GameItem(mesh);
         gameItem1.setScale(0.5f);
-        gameItem1.setPositionFromCoordinates(1, 1, -4);
+        gameItem1.setPositionFromCoordinates(0, -1, -2);
+
         GameItem gameItem2 = new GameItem(mesh);
         gameItem2.setScale(0.5f);
-        gameItem2.setPositionFromCoordinates(0, 0, -5);
+        gameItem2.setPositionFromCoordinates(0, -1, -3);*/
 
-        gameItems = new GameItem[]{gameItem, gameItem1, gameItem2};
+//        gameItems = new GameItem[]{gameItem, gameItem1, gameItem2};
 
         // TODO: refactor
-        Vector3f lightPosition = new Vector3f(1, 1, 1);
+        /*Vector3f lightPosition = new Vector3f(1, 1, 1);
         PointLight pointLight = new PointLight(lightPosition, new Vector3f(0, 0, 1), 1f, new Attenuation(0f, 0f, 1f));
         pointLights = new PointLight[]{pointLight};
 
-        lightPosition = new Vector3f(0, 0.0f, 10f);
+        Vector3f lightPosition = new Vector3f(0, 0.0f, 10f);
         pointLight = new PointLight(new Vector3f(1, 1, 1), lightPosition, 1f, new Attenuation(0f, 0f, 0.02f));
         Vector3f coneDir = new Vector3f(0, 0, -1);
         float cutoff = (float) Math.cos(Math.toRadians(140));
         SpotLight spotLight = new SpotLight(pointLight, coneDir, cutoff);
-        spotLights= new SpotLight[]{spotLight, new SpotLight(spotLight)};
+        spotLights= new SpotLight[]{spotLight, new SpotLight(spotLight)};*/
 
-        lightPosition = new Vector3f(-1, 0, 0);
+        Vector3f lightPosition = new Vector3f(-10, 10, 10);
         directionalLight = new DirectionalLight(new Vector3f(1, 1, 1), lightPosition, 1f);
     }
 
@@ -107,7 +126,7 @@ public class GameLogicImpl implements GameLogic {
 
     @Override
     public void update(InputManager inputManager, float updateInterval) {
-        camera.movePosition(CAMERA_POSITION_STEP * cameraMovement.x, CAMERA_POSITION_STEP * cameraMovement.y, CAMERA_POSITION_STEP * cameraMovement.z);
+        camera.movePosition(MOVEMENT_SPEED * cameraMovement.x, MOVEMENT_SPEED * cameraMovement.y, MOVEMENT_SPEED * cameraMovement.z);
         if (inputManager.isRightMouseButtonPressed()) {
             Vector2f rotation = inputManager.getDisplay();
             camera.moveRotation(MOUSE_SENSITIVITY * rotation.x, MOUSE_SENSITIVITY * rotation.y, 0);

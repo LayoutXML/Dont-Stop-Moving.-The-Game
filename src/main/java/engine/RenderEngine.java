@@ -13,6 +13,8 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import utils.ResourceUtils;
 
+import java.util.List;
+
 import static org.lwjgl.opengl.GL11.*;
 
 public class RenderEngine {
@@ -43,7 +45,7 @@ public class RenderEngine {
         shaders.createDirectionalLightUniform("directionalLight");
     }
 
-    public void render(Window window, Camera camera, GameItem[] gameItems, Vector3f ambient, PointLight[] pointLights, SpotLight[] spotLights, DirectionalLight directionalLight) {
+    public void render(Window window, Camera camera, List<GameItem> gameItems, Vector3f ambient, PointLight[] pointLights, SpotLight[] spotLights, DirectionalLight directionalLight) {
         clear();
 
         if (window.isResized()) {

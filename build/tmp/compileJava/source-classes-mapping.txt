@@ -39,12 +39,12 @@ utils/TimerUtils.java
  utils.TimerUtils
 model/exceptions/ResourceException.java
  model.exceptions.ResourceException
-engine/RenderEngine.java
- engine.RenderEngine
-engine/graphics/Material.java
- engine.graphics.Material
 engine/graphics/Shaders.java
  engine.graphics.Shaders
+engine/graphics/Material.java
+ engine.graphics.Material
+engine/RenderEngine.java
+ engine.RenderEngine
 Main.java
  Main
 engine/impl/GameLogicImpl.java
