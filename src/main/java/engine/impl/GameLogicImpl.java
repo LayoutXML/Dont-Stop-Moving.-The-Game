@@ -33,6 +33,7 @@ public class GameLogicImpl implements GameLogic {
     private PointLight[] pointLights;
     private SpotLight[] spotLights;
     private DirectionalLight directionalLight;
+    private Status status;
     private float lightAngle = -90;
     private float spotLightAngle = 0;
     private float spotIncrement = 1;
@@ -61,7 +62,8 @@ public class GameLogicImpl implements GameLogic {
                 {0, 0, -3}
         };
         for (float[] mockCoordinate : mockCoordinates) {
-            GameItem gameItem = new GameItem(mesh);
+            GameItem gameItem = new GameItem();
+            gameItem.setMesh(mesh);
             gameItem.setScale(0.5f);
             gameItem.setPositionFromCoordinates(mockCoordinate[0], mockCoordinate[1], mockCoordinate[2]);
             gameItems.add(gameItem);
@@ -95,6 +97,9 @@ public class GameLogicImpl implements GameLogic {
 
         Vector3f lightPosition = new Vector3f(-10, 10, 10);
         directionalLight = new DirectionalLight(new Vector3f(1, 1, 1), lightPosition, 1f);
+
+        status = new Status();
+        status.startTimer();
     }
 
     @Override
@@ -135,11 +140,13 @@ public class GameLogicImpl implements GameLogic {
 
     @Override
     public void render(Window window) {
-        renderEngine.render(window, camera, gameItems, ambientLight, pointLights, spotLights, directionalLight);
+        status.render(window);
+        renderEngine.render(window, camera, gameItems, ambientLight, pointLights, spotLights, directionalLight, status);
     }
 
     @Override
     public void free() {
+        status.free();
         renderEngine.free();
         for (GameItem gameItem : gameItems) {
             gameItem.free();

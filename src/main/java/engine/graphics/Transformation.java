@@ -9,6 +9,7 @@ public class Transformation {
     private final Matrix4f projection = new Matrix4f();
     private final Matrix4f modelView = new Matrix4f();
     private final Matrix4f view = new Matrix4f();
+    private final Matrix4f status = new Matrix4f();
 
     public Matrix4f getProjectionWithPerspective(float fov, float width, float height, float zNear, float zFar) {
         return projection.setPerspective(fov, width / height, zNear, zFar);
@@ -37,5 +38,29 @@ public class Transformation {
                 .rotate((float) Math.toRadians(rotation.x), new Vector3f(1, 0, 0))
                 .rotate((float) Math.toRadians(rotation.y), new Vector3f(0, 1, 0))
                 .translate(-position.x, -position.y, -position.z);
+    }
+
+    public Matrix4f getStatusProjectionMatrix(float left, float right, float bottom, float top) {
+        status.identity();
+        status.setOrtho2D(left, right, bottom, top);
+        return status;
+    }
+
+    public Matrix4f getStatusMatrix(GameItem gameItem, Matrix4f projection) {
+        Vector3f rotation = gameItem.getRotation();
+        Vector3f position = gameItem.getPosition();
+        float scale = gameItem.getScale();
+        Matrix4f model = new Matrix4f();
+
+        model.identity().translate(position)
+                .rotateX((float) Math.toRadians(-rotation.x))
+                .rotateX((float) Math.toRadians(-rotation.y))
+                .rotateX((float) Math.toRadians(-rotation.z))
+                .scale(scale);
+
+        Matrix4f currentStatusMatrix = new Matrix4f(projection);
+        currentStatusMatrix.mul(model);
+
+        return currentStatusMatrix;
     }
 }

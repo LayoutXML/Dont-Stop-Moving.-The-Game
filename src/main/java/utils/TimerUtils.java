@@ -20,4 +20,9 @@ public class TimerUtils {
         previousLoopTime = currentTime;
         return elapsedTime;
     }
+
+    public float getElapsedTimeSinceInitialization() {
+        float currentTime = getTimeInSeconds();
+        return currentTime - previousLoopTime;
+    }
 }

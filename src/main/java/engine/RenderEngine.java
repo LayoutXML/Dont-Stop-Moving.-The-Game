@@ -1,5 +1,6 @@
 package engine;
 
+import engine.graphics.Mesh;
 import engine.graphics.Shaders;
 import engine.graphics.Transformation;
 import engine.lights.DirectionalLight;
@@ -24,11 +25,17 @@ public class RenderEngine {
     private static final int MAX_POINT_LIGHTS = 5;
     private static final int MAX_SPOT_LIGHTS = 5;
 
+    private final float specular = 10f;
     private final Transformation transformation = new Transformation();
     private Shaders shaders;
-    private final float specular = 10f;
+    private Shaders statusShader;
 
     public void initialize(Window window) throws InitializationException, ResourceException {
+        initializeGameShader();
+        initializeStatusShader();
+    }
+
+    private void initializeGameShader() throws InitializationException, ResourceException {
         shaders = new Shaders();
         shaders.createVertexShader(ResourceUtils.loadResource("/vertex.vs"));
         shaders.createFragmentShader(ResourceUtils.loadResource("/fragment.fs"));
@@ -45,7 +52,18 @@ public class RenderEngine {
         shaders.createDirectionalLightUniform("directionalLight");
     }
 
-    public void render(Window window, Camera camera, List<GameItem> gameItems, Vector3f ambient, PointLight[] pointLights, SpotLight[] spotLights, DirectionalLight directionalLight) {
+    private void initializeStatusShader() throws InitializationException, ResourceException {
+        statusShader = new Shaders();
+        statusShader.createVertexShader(ResourceUtils.loadResource("/status_vertex.vs"));
+        statusShader.createFragmentShader(ResourceUtils.loadResource("/status_fragment.fs"));
+        statusShader.link();
+
+        statusShader.createUniform("matrix");
+        statusShader.createUniform("color");
+        statusShader.createUniform("hasTexture");
+    }
+
+    public void render(Window window, Camera camera, List<GameItem> gameItems, Vector3f ambient, PointLight[] pointLights, SpotLight[] spotLights, DirectionalLight directionalLight, Status status) {
         clear();
 
         if (window.isResized()) {
@@ -53,6 +71,11 @@ public class RenderEngine {
             window.setResized(false);
         }
 
+        renderGame(window, camera, gameItems, ambient, pointLights, spotLights, directionalLight);
+        renderStatus(window, status);
+    }
+
+    private void renderGame(Window window, Camera camera, List<GameItem> gameItems, Vector3f ambient, PointLight[] pointLights, SpotLight[] spotLights, DirectionalLight directionalLight) {
         shaders.bind();
 
         Matrix4f projection = transformation.getProjectionWithPerspective(FIELD_OF_VIEW, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
@@ -65,12 +88,33 @@ public class RenderEngine {
 
         for (GameItem gameItem : gameItems) {
             Matrix4f world = transformation.getModelView(gameItem, view);
+
             shaders.setUniform("models", world);
             shaders.setUniform("material", gameItem.getMesh().getMaterial());
+
             gameItem.getMesh().render(); // TODO move rendering to gameitem
         }
 
         shaders.unbind();
+    }
+
+    private void renderStatus(Window window, Status status) {
+        statusShader.bind();
+
+        Matrix4f projectionMatrix = transformation.getStatusProjectionMatrix(0, window.getWidth(), window.getHeight(), 0);
+
+        for (GameItem gameItem : status.getGameItems()) {
+            Mesh mesh = gameItem.getMesh();
+            Matrix4f matrix = transformation.getStatusMatrix(gameItem, projectionMatrix);
+
+            statusShader.setUniform("matrix", matrix);
+            statusShader.setUniform("color", mesh.getMaterial().getAmbient());
+            statusShader.setUniform("hasTexture", mesh.getMaterial().hasTexture() ? 1 : 0);
+
+            mesh.render();
+        }
+
+        statusShader.unbind();
     }
 
     private void renderLights(Matrix4f view, Vector3f ambient, PointLight[] pointLights, SpotLight[] spotLights, DirectionalLight directionalLight) {
@@ -143,6 +187,9 @@ public class RenderEngine {
     public void free() {
         if (shaders != null) {
             shaders.free();
+        }
+        if (statusShader != null) {
+            statusShader.free();
         }
     }
 }

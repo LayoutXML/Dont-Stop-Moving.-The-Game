@@ -9,21 +9,26 @@ import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
-import static org.lwjgl.stb.STBImage.stbi_image_free;
-import static org.lwjgl.stb.STBImage.stbi_load;
+import static org.lwjgl.stb.STBImage.*;
 
 @Getter
 public class Texture {
     private int id;
-    private final String fileName;
+    private String fileName;
+    private ByteBuffer image;
 
     public Texture(String fileName) throws ResourceException {
         this.fileName = fileName;
         loadTexture();
     }
 
+    public Texture(ByteBuffer byteBuffer) throws ResourceException {
+        this.image = byteBuffer;
+        loadTexture();
+    }
+
     public void loadTexture() throws ResourceException {
-        if (fileName == null) {
+        if (fileName == null && image == null) {
             throw new ResourceException("RE2");
         }
 
@@ -37,7 +42,13 @@ public class Texture {
             yBuffer = memoryStack.mallocInt(2);
             channelsBuffer = memoryStack.mallocInt(1);
 
-            byteBuffer = stbi_load(fileName, xBuffer, yBuffer, channelsBuffer, 4);
+            byteBuffer = null;
+            if (fileName != null && !fileName.isEmpty()) {
+                byteBuffer = stbi_load(fileName, xBuffer, yBuffer, channelsBuffer, 4);
+            } else {
+                byteBuffer = stbi_load_from_memory(image, xBuffer, yBuffer, channelsBuffer, 4);
+            }
+
             if (byteBuffer == null) {
                 throw new ResourceException("RE3");
             }

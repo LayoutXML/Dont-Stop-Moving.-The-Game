@@ -1,23 +1,27 @@
-engine/graphics/Texture.java
- engine.graphics.Texture
+engine/GameEngine.java
+ engine.GameEngine
 engine/graphics/IndexGroup.java
  engine.graphics.IndexGroup
-engine/graphics/Transformation.java
- engine.graphics.Transformation
+engine/graphics/Material.java
+ engine.graphics.Material
 model/exceptions/InitializationException.java
  model.exceptions.InitializationException
-engine/graphics/Mesh.java
- engine.graphics.Mesh
+engine/graphics/CharacterInformation.java
+ engine.graphics.CharacterInformation
 engine/lights/SpotLight.java
  engine.lights.SpotLight
-engine/OBJLoader.java
- engine.OBJLoader
+model/exceptions/ResourceException.java
+ model.exceptions.ResourceException
+engine/graphics/Shaders.java
+ engine.graphics.Shaders
 engine/lights/Attenuation.java
  engine.lights.Attenuation
-engine/graphics/Face.java
- engine.graphics.Face
+engine/graphics/FontTexture.java
+ engine.graphics.FontTexture
 engine/GameLogic.java
  engine.GameLogic
+engine/graphics/Face.java
+ engine.graphics.Face
 engine/Camera.java
  engine.Camera
 engine/Window.java
@@ -27,25 +31,29 @@ utils/ResourceUtils.java
  utils.ResourceUtils
 engine/lights/PointLight.java
  engine.lights.PointLight
-engine/GameEngine.java
- engine.GameEngine
-model/GameItem.java
- model.GameItem
+Main.java
+ Main
+utils/TimerUtils.java
+ utils.TimerUtils
 engine/InputManager.java
  engine.InputManager
 engine/lights/DirectionalLight.java
  engine.lights.DirectionalLight
-utils/TimerUtils.java
- utils.TimerUtils
-model/exceptions/ResourceException.java
- model.exceptions.ResourceException
-engine/graphics/Shaders.java
- engine.graphics.Shaders
-engine/graphics/Material.java
- engine.graphics.Material
+engine/graphics/Texture.java
+ engine.graphics.Texture
+engine/OBJLoader.java
+ engine.OBJLoader
 engine/RenderEngine.java
  engine.RenderEngine
-Main.java
- Main
+engine/graphics/Transformation.java
+ engine.graphics.Transformation
+engine/graphics/Mesh.java
+ engine.graphics.Mesh
 engine/impl/GameLogicImpl.java
  engine.impl.GameLogicImpl
+engine/Status.java
+ engine.Status
+model/GameItem.java
+ model.GameItem
+model/TextItem.java
+ model.TextItem

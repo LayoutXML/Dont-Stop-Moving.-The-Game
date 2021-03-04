@@ -128,6 +128,18 @@ public class Mesh {
         glDeleteVertexArrays(vertexArraysId);
     }
 
+    public void freeWithoutTexture() {
+        glDisableVertexAttribArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        for (int bufferId : bufferIdList) {
+            glDeleteBuffers(bufferId);
+        }
+
+        glBindVertexArray(0);
+        glDeleteVertexArrays(vertexArraysId);
+    }
+
     public boolean hasTexture() {
         return material != null && material.getTexture() != null;
     }

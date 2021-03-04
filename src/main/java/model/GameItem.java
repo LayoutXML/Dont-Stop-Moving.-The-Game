@@ -2,6 +2,7 @@ package model;
 
 import engine.graphics.Mesh;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.joml.Vector3f;
@@ -11,7 +12,7 @@ import org.joml.Vector3f;
 @RequiredArgsConstructor
 public class GameItem {
     private float scale = 1;
-    private final Mesh mesh;
+    private Mesh mesh;
     private final Vector3f position = new Vector3f();
     private final Vector3f rotation = new Vector3f();
 
