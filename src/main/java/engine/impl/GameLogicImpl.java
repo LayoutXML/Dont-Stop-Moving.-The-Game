@@ -15,6 +15,7 @@ import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -27,16 +28,8 @@ public class GameLogicImpl implements GameLogic {
     private final Camera camera = new Camera();
     private final Vector3f cameraMovement = new Vector3f();
 
-    private List<GameItem> gameItems = new ArrayList<>();
-
-    private Vector3f ambientLight = new Vector3f(0.3f, 0.3f, 0.3f);
-    private PointLight[] pointLights;
-    private SpotLight[] spotLights;
-    private DirectionalLight directionalLight;
+    private Scene scene;
     private Status status;
-    private float lightAngle = -90;
-    private float spotLightAngle = 0;
-    private float spotIncrement = 1;
 
     @Override
     public void initialize(Window window) throws InitializationException, ResourceException {
@@ -45,6 +38,8 @@ public class GameLogicImpl implements GameLogic {
         }
 
         renderEngine.initialize(window);
+
+        scene = new Scene();
 
         Texture texture = new Texture("src/textures/stone_cube.png");
         Mesh mesh = OBJLoader.loadMesh("/cube.obj");
@@ -61,6 +56,7 @@ public class GameLogicImpl implements GameLogic {
                 {0, -1, -5}, {-1, -1, -5}, {1, -1, -5},
                 {0, 0, -3}
         };
+        List<GameItem> gameItems = new ArrayList<>();
         for (float[] mockCoordinate : mockCoordinates) {
             GameItem gameItem = new GameItem();
             gameItem.setMesh(mesh);
@@ -68,6 +64,24 @@ public class GameLogicImpl implements GameLogic {
             gameItem.setPositionFromCoordinates(mockCoordinate[0], mockCoordinate[1], mockCoordinate[2]);
             gameItems.add(gameItem);
         }
+        scene.addGameItems(gameItems);
+
+        // Setup  SkyBox
+        Skybox skyBox = new Skybox("/skybox.obj", "src/textures/skybox.png");
+        skyBox.setScale(50f);
+        scene.setSkybox(skyBox);
+
+        // Setup Lights
+        Lights sceneLight = new Lights();
+        scene.setLights(sceneLight);
+
+        // Ambient Light
+        sceneLight.setAmbient(new Vector3f(1.0f, 1.0f, 1.0f));
+
+        // Directional Light
+        float lightIntensity = 1.0f;
+        Vector3f lightPosition = new Vector3f(-1, 0, 0);
+        sceneLight.setDirectionalLight(new DirectionalLight(new Vector3f(1, 1, 1), lightPosition, lightIntensity));
 
         /*GameItem gameItem = new GameItem(mesh);
         gameItem.setScale(0.5f);
@@ -94,9 +108,6 @@ public class GameLogicImpl implements GameLogic {
         float cutoff = (float) Math.cos(Math.toRadians(140));
         SpotLight spotLight = new SpotLight(pointLight, coneDir, cutoff);
         spotLights= new SpotLight[]{spotLight, new SpotLight(spotLight)};*/
-
-        Vector3f lightPosition = new Vector3f(-10, 10, 10);
-        directionalLight = new DirectionalLight(new Vector3f(1, 1, 1), lightPosition, 1f);
 
         status = new Status();
         status.startTimer();
@@ -141,15 +152,13 @@ public class GameLogicImpl implements GameLogic {
     @Override
     public void render(Window window) {
         status.render(window);
-        renderEngine.render(window, camera, gameItems, ambientLight, pointLights, spotLights, directionalLight, status);
+        renderEngine.render(window, camera, scene, status);
     }
 
     @Override
     public void free() {
         status.free();
+        scene.free();
         renderEngine.free();
-        for (GameItem gameItem : gameItems) {
-            gameItem.free();
-        }
     }
 }

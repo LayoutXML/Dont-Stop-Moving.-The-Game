@@ -15,6 +15,7 @@ import org.joml.Vector4f;
 import utils.ResourceUtils;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -26,13 +27,28 @@ public class RenderEngine {
     private static final int MAX_SPOT_LIGHTS = 5;
 
     private final float specular = 10f;
+
     private final Transformation transformation = new Transformation();
     private Shaders shaders;
     private Shaders statusShader;
+    private Shaders skybox;
 
     public void initialize(Window window) throws InitializationException, ResourceException {
+        initializeSkybox();
         initializeGameShader();
         initializeStatusShader();
+    }
+
+    private void initializeSkybox() throws InitializationException, ResourceException {
+        skybox = new Shaders();
+        skybox.createVertexShader(ResourceUtils.loadResource("/skybox_vertex.vs"));
+        skybox.createFragmentShader(ResourceUtils.loadResource("/skybox_fragment.fs"));
+        skybox.link();
+
+        skybox.createUniform("projection");
+        skybox.createUniform("models");
+        skybox.createUniform("sampler");
+        skybox.createUniform("ambient");
     }
 
     private void initializeGameShader() throws InitializationException, ResourceException {
@@ -63,7 +79,7 @@ public class RenderEngine {
         statusShader.createUniform("hasTexture");
     }
 
-    public void render(Window window, Camera camera, List<GameItem> gameItems, Vector3f ambient, PointLight[] pointLights, SpotLight[] spotLights, DirectionalLight directionalLight, Status status) {
+    public void render(Window window, Camera camera, Scene scene, Status status) {
         clear();
 
         if (window.isResized()) {
@@ -71,31 +87,60 @@ public class RenderEngine {
             window.setResized(false);
         }
 
-        renderGame(window, camera, gameItems, ambient, pointLights, spotLights, directionalLight);
+        transformation.updateProjectionWithPerspective(FIELD_OF_VIEW, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
+        transformation.updateCameraView(camera);
+
+        renderScene(window, camera, scene);
+        renderSkybox(window, camera, scene);
         renderStatus(window, status);
     }
 
-    private void renderGame(Window window, Camera camera, List<GameItem> gameItems, Vector3f ambient, PointLight[] pointLights, SpotLight[] spotLights, DirectionalLight directionalLight) {
+    private void renderScene(Window window, Camera camera, Scene scene) {
         shaders.bind();
 
-        Matrix4f projection = transformation.getProjectionWithPerspective(FIELD_OF_VIEW, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
+        Matrix4f projection = transformation.getProjection();
         shaders.setUniform("projection", projection);
         shaders.setUniform("sampler", 0);
 
-        Matrix4f view = transformation.getCameraView(camera);
+        Matrix4f view = transformation.getView();
 
-        renderLights(view, ambient, pointLights, spotLights, directionalLight);
+        Lights sceneLights = scene.getLights();
+        renderLights(view, sceneLights);
 
-        for (GameItem gameItem : gameItems) {
-            Matrix4f world = transformation.getModelView(gameItem, view);
-
-            shaders.setUniform("models", world);
-            shaders.setUniform("material", gameItem.getMesh().getMaterial());
-
-            gameItem.getMesh().render(); // TODO move rendering to gameitem
+        Map<Mesh, List<GameItem>> meshes = scene.getMeshes();
+        for (Mesh mesh : meshes.keySet()) {
+            shaders.setUniform("material", mesh.getMaterial());
+            mesh.renderList(meshes.get(mesh), this, view);
         }
 
         shaders.unbind();
+    }
+
+    public void renderGameItemFromMesh(GameItem gameItem, Matrix4f view) {
+        Matrix4f models = transformation.getModelView(gameItem, view);
+        shaders.setUniform("models", models);
+    }
+
+    private void renderSkybox(Window window, Camera camera, Scene scene) {
+        skybox.bind();
+
+        Matrix4f projection = transformation.getProjection();
+        skybox.setUniform("projection", projection);
+        skybox.setUniform("sampler", 0);
+
+        Matrix4f view = transformation.getView();
+        view.m30(0);
+        view.m31(0);
+        view.m32(0);
+
+        Skybox sceneSkybox = scene.getSkybox();
+        Matrix4f models = transformation.getModelView(sceneSkybox, view);
+        skybox.setUniform("models", models);
+        skybox.setUniform("ambient", scene.getLights().getAmbient());
+
+        sceneSkybox.getMesh().render();
+
+        skybox.unbind();
     }
 
     private void renderStatus(Window window, Status status) {
@@ -117,13 +162,13 @@ public class RenderEngine {
         statusShader.unbind();
     }
 
-    private void renderLights(Matrix4f view, Vector3f ambient, PointLight[] pointLights, SpotLight[] spotLights, DirectionalLight directionalLight) {
-        shaders.setUniform("ambient", ambient);
+    private void renderLights(Matrix4f view, Lights lights) {
+        shaders.setUniform("ambient", lights.getAmbient());
         shaders.setUniform("specular", specular);
 
-        renderPointLights(view, pointLights);
-        renderSpotLights(view, spotLights);
-        renderDirectionalLight(view, directionalLight);
+        renderPointLights(view, lights.getPointLights());
+        renderSpotLights(view, lights.getSpotLights());
+        renderDirectionalLight(view, lights.getDirectionalLight());
     }
 
     private void renderPointLights(Matrix4f view, PointLight[] pointLights) {
@@ -185,6 +230,9 @@ public class RenderEngine {
     }
 
     public void free() {
+        if (skybox != null) {
+            skybox.free();
+        }
         if (shaders != null) {
             shaders.free();
         }

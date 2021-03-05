@@ -1,7 +1,10 @@
 package engine.graphics;
 
+import engine.RenderEngine;
 import lombok.Getter;
 import lombok.Setter;
+import model.GameItem;
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.system.MemoryUtil;
 
@@ -9,6 +12,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -104,6 +108,24 @@ public class Mesh {
 
         glBindVertexArray(vertexArraysId);
         glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
+
+        glBindVertexArray(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    public void renderList(List<GameItem> gameItems, RenderEngine renderEngine, Matrix4f view) {
+        Texture texture = material.getTexture();
+        if (texture != null) {
+            glActiveTexture(GL_TEXTURE);
+            glBindTexture(GL_TEXTURE_2D, texture.getId());
+        }
+
+        glBindVertexArray(vertexArraysId);
+
+        for (GameItem gameItem : gameItems) {
+            renderEngine.renderGameItemFromMesh(gameItem, view);
+            glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
+        }
 
         glBindVertexArray(0);
         glBindTexture(GL_TEXTURE_2D, 0);

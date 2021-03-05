@@ -1,17 +1,21 @@
 package engine.graphics;
 
 import engine.Camera;
+import lombok.Getter;
 import model.GameItem;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
+@Getter
 public class Transformation {
     private final Matrix4f projection = new Matrix4f();
     private final Matrix4f modelView = new Matrix4f();
+    private final Matrix4f model = new Matrix4f();
     private final Matrix4f view = new Matrix4f();
     private final Matrix4f status = new Matrix4f();
+    private final Matrix4f statusModel = new Matrix4f();
 
-    public Matrix4f getProjectionWithPerspective(float fov, float width, float height, float zNear, float zFar) {
+    public Matrix4f updateProjectionWithPerspective(float fov, float width, float height, float zNear, float zFar) {
         return projection.setPerspective(fov, width / height, zNear, zFar);
     }
 
@@ -20,17 +24,17 @@ public class Transformation {
         Vector3f position = gameItem.getPosition();
         float scale = gameItem.getScale();
 
-        modelView.identity().translation(position)
+        model.identity().translation(position)
                 .rotateX((float) Math.toRadians(-rotation.x))
                 .rotateY((float) Math.toRadians(-rotation.y))
                 .rotateZ((float) Math.toRadians(-rotation.z))
                 .scale(scale);
 
-        Matrix4f viewCopy = new Matrix4f(view);
-        return viewCopy.mul(modelView);
+       modelView.set(view);
+        return modelView.mul(model);
     }
 
-    public Matrix4f getCameraView(Camera camera) {
+    public Matrix4f updateCameraView(Camera camera) {
         Vector3f position = camera.getPosition();
         Vector3f rotation = camera.getRotation();
 
@@ -50,7 +54,6 @@ public class Transformation {
         Vector3f rotation = gameItem.getRotation();
         Vector3f position = gameItem.getPosition();
         float scale = gameItem.getScale();
-        Matrix4f model = new Matrix4f();
 
         model.identity().translate(position)
                 .rotateX((float) Math.toRadians(-rotation.x))
@@ -58,9 +61,9 @@ public class Transformation {
                 .rotateX((float) Math.toRadians(-rotation.z))
                 .scale(scale);
 
-        Matrix4f currentStatusMatrix = new Matrix4f(projection);
-        currentStatusMatrix.mul(model);
+        statusModel.set(status);
+        statusModel.mul(model);
 
-        return currentStatusMatrix;
+        return statusModel;
     }
 }

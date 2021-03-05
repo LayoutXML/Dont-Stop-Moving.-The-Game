@@ -99,16 +99,20 @@ public class OBJLoader {
         indexes.add(position);
 
         if (faceVertexIndex.getIndexTextureCoordinate() >= 0) {
-            Vector2f textureCoordinate = textureCoordinates.get(faceVertexIndex.getIndexTextureCoordinate());
-            textureCoordinateArray[position * 2] = textureCoordinate.x;
-            textureCoordinateArray[position * 2 + 1] = 1 - textureCoordinate.y;
+            if (textureCoordinates.size() > faceVertexIndex.getIndexTextureCoordinate()) {
+                Vector2f textureCoordinate = textureCoordinates.get(faceVertexIndex.getIndexTextureCoordinate());
+                textureCoordinateArray[position * 2] = textureCoordinate.x;
+                textureCoordinateArray[position * 2 + 1] = 1 - textureCoordinate.y;
+            }
         }
 
         if (faceVertexIndex.getIndexVectorNormal() >= 0) {
-            Vector3f normal = normals.get(faceVertexIndex.getIndexVectorNormal());
-            normalArray[position * 3] = normal.x;
-            normalArray[position * 3 + 1] = normal.y;
-            normalArray[position * 3 + 2] = normal.z;
+            if (normals.size() > faceVertexIndex.getIndexVectorNormal()) {
+                Vector3f normal = normals.get(faceVertexIndex.getIndexVectorNormal());
+                normalArray[position * 3] = normal.x;
+                normalArray[position * 3 + 1] = normal.y;
+                normalArray[position * 3 + 2] = normal.z;
+            }
         }
     }
 }
