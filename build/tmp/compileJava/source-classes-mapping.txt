@@ -24,28 +24,28 @@ engine/graphics/Face.java
  engine.graphics.Face
 engine/lights/PointLight.java
  engine.lights.PointLight
-Main.java
- Main
+engine/graphics/FontTexture.java
+ engine.graphics.FontTexture
 engine/graphics/Texture.java
  engine.graphics.Texture
 engine/graphics/Shaders.java
  engine.graphics.Shaders
 engine/graphics/Material.java
  engine.graphics.Material
-engine/graphics/FontTexture.java
- engine.graphics.FontTexture
 engine/RenderEngine.java
  engine.RenderEngine
 engine/graphics/Transformation.java
  engine.graphics.Transformation
 engine/graphics/Mesh.java
  engine.graphics.Mesh
-engine/impl/GameLogicImpl.java
- engine.impl.GameLogicImpl
+engine/Scene.java
+ engine.Scene
 model/TextItem.java
  model.TextItem
 engine/OBJLoader.java
  engine.OBJLoader
+engine/InputManager.java
+ engine.InputManager
 engine/Skybox.java
  engine.Skybox
 engine/GameLogic.java
@@ -59,7 +59,7 @@ engine/GameEngine.java
  engine.GameEngine
 model/GameItem.java
  model.GameItem
-engine/Scene.java
- engine.Scene
-engine/InputManager.java
- engine.InputManager
+Main.java
+ Main
+engine/impl/GameLogicImpl.java
+ engine.impl.GameLogicImpl

@@ -41,7 +41,7 @@ public class GameLogicImpl implements GameLogic {
 
         scene = new Scene();
 
-        Texture texture = new Texture("src/textures/stone_cube.png");
+        Texture texture = new Texture("src/textures/blocks/stone.png");
         Mesh mesh = OBJLoader.loadMesh("/cube.obj");
         Material material = new Material();
         material.setTexture(texture);
