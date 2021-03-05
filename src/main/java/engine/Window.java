@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 @Getter
@@ -36,6 +37,8 @@ public class Window {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
+        glfwWindowHint(GLFW_SAMPLES, 4);
 
         windowId = glfwCreateWindow(width, height, name, NULL, NULL);
         if (windowId == NULL) {
@@ -71,6 +74,8 @@ public class Window {
 
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
+
+        glEnable(GL_MULTISAMPLE);
 
 //        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }

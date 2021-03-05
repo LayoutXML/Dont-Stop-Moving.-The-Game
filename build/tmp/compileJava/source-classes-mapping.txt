@@ -1,11 +1,11 @@
-engine/GameLogic.java
- engine.GameLogic
+utils/ResourceUtils.java
+ utils.ResourceUtils
 engine/graphics/IndexGroup.java
  engine.graphics.IndexGroup
 engine/Lights.java
  engine.Lights
-engine/InputManager.java
- engine.InputManager
+engine/Camera.java
+ engine.Camera
 model/exceptions/InitializationException.java
  model.exceptions.InitializationException
 engine/graphics/CharacterInformation.java
@@ -24,42 +24,42 @@ engine/graphics/Face.java
  engine.graphics.Face
 engine/lights/PointLight.java
  engine.lights.PointLight
-engine/Window.java
- engine.Window
- engine.Window$WindowBuilder
-engine/Camera.java
- engine.Camera
-model/GameItem.java
- model.GameItem
-utils/ResourceUtils.java
- utils.ResourceUtils
 Main.java
  Main
-engine/graphics/Transformation.java
- engine.graphics.Transformation
-engine/GameEngine.java
- engine.GameEngine
-engine/Scene.java
- engine.Scene
-engine/OBJLoader.java
- engine.OBJLoader
 engine/graphics/Texture.java
  engine.graphics.Texture
-engine/RenderEngine.java
- engine.RenderEngine
 engine/graphics/Shaders.java
  engine.graphics.Shaders
-engine/Skybox.java
- engine.Skybox
 engine/graphics/Material.java
  engine.graphics.Material
+engine/graphics/FontTexture.java
+ engine.graphics.FontTexture
+engine/RenderEngine.java
+ engine.RenderEngine
+engine/graphics/Transformation.java
+ engine.graphics.Transformation
 engine/graphics/Mesh.java
  engine.graphics.Mesh
 engine/impl/GameLogicImpl.java
  engine.impl.GameLogicImpl
-engine/Status.java
- engine.Status
-engine/graphics/FontTexture.java
- engine.graphics.FontTexture
 model/TextItem.java
  model.TextItem
+engine/OBJLoader.java
+ engine.OBJLoader
+engine/Skybox.java
+ engine.Skybox
+engine/GameLogic.java
+ engine.GameLogic
+engine/Status.java
+ engine.Status
+engine/Window.java
+ engine.Window
+ engine.Window$WindowBuilder
+engine/GameEngine.java
+ engine.GameEngine
+model/GameItem.java
+ model.GameItem
+engine/Scene.java
+ engine.Scene
+engine/InputManager.java
+ engine.InputManager
