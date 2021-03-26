@@ -1,6 +1,6 @@
-import engine.GameEngine;
-import engine.GameLogic;
-import engine.impl.GameLogicImpl;
+import model.GameEngine;
+import model.GameLogic;
+import model.GameLogicImpl;
 
 public class Main {
     private static final String NAME = "Game";

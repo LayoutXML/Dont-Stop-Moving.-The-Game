@@ -1,65 +1,65 @@
-utils/ResourceUtils.java
- utils.ResourceUtils
-engine/graphics/IndexGroup.java
- engine.graphics.IndexGroup
-engine/Lights.java
- engine.Lights
-engine/Camera.java
- engine.Camera
+view/Status.java
+ view.Status
+view/lights/SpotLight.java
+ view.lights.SpotLight
+view/Window.java
+ view.Window
+ view.Window$WindowBuilder
+model/GameEngine.java
+ model.GameEngine
 model/exceptions/InitializationException.java
  model.exceptions.InitializationException
-engine/graphics/CharacterInformation.java
- engine.graphics.CharacterInformation
-engine/lights/SpotLight.java
- engine.lights.SpotLight
-model/exceptions/ResourceException.java
- model.exceptions.ResourceException
-utils/TimerUtils.java
- utils.TimerUtils
-engine/lights/Attenuation.java
- engine.lights.Attenuation
-engine/lights/DirectionalLight.java
- engine.lights.DirectionalLight
-engine/graphics/Face.java
- engine.graphics.Face
-engine/lights/PointLight.java
- engine.lights.PointLight
-engine/graphics/FontTexture.java
- engine.graphics.FontTexture
-engine/graphics/Texture.java
- engine.graphics.Texture
-engine/graphics/Shaders.java
- engine.graphics.Shaders
-engine/graphics/Material.java
- engine.graphics.Material
-engine/RenderEngine.java
- engine.RenderEngine
-engine/graphics/Transformation.java
- engine.graphics.Transformation
-engine/graphics/Mesh.java
- engine.graphics.Mesh
-engine/Scene.java
- engine.Scene
-model/TextItem.java
- model.TextItem
-engine/OBJLoader.java
- engine.OBJLoader
-engine/InputManager.java
- engine.InputManager
-engine/Skybox.java
- engine.Skybox
-engine/GameLogic.java
- engine.GameLogic
-engine/Status.java
- engine.Status
-engine/Window.java
- engine.Window
- engine.Window$WindowBuilder
-engine/GameEngine.java
- engine.GameEngine
-model/GameItem.java
- model.GameItem
+view/graphics/Texture.java
+ view.graphics.Texture
+model/GameLogic.java
+ model.GameLogic
+view/lights/Attenuation.java
+ view.lights.Attenuation
+view/GameItem.java
+ view.GameItem
+model/OBJLoader.java
+ model.OBJLoader
+view/graphics/Face.java
+ view.graphics.Face
+view/Skybox.java
+ view.Skybox
+model/GameLogicImpl.java
+ model.GameLogicImpl
+view/graphics/Transformation.java
+ view.graphics.Transformation
 Main.java
  Main
-engine/impl/GameLogicImpl.java
- engine.impl.GameLogicImpl
+model/utils/ResourceUtils.java
+ model.utils.ResourceUtils
+controller/InputManager.java
+ controller.InputManager
+view/Lights.java
+ view.Lights
+view/graphics/FontTexture.java
+ view.graphics.FontTexture
+view/graphics/CharacterInformation.java
+ view.graphics.CharacterInformation
+view/graphics/IndexGroup.java
+ view.graphics.IndexGroup
+view/graphics/Shaders.java
+ view.graphics.Shaders
+view/Camera.java
+ view.Camera
+view/lights/PointLight.java
+ view.lights.PointLight
+view/graphics/Mesh.java
+ view.graphics.Mesh
+model/exceptions/ResourceException.java
+ model.exceptions.ResourceException
+view/lights/DirectionalLight.java
+ view.lights.DirectionalLight
+view/RenderEngine.java
+ view.RenderEngine
+view/Scene.java
+ view.Scene
+view/graphics/Material.java
+ view.graphics.Material
+model/utils/TimerUtils.java
+ model.utils.TimerUtils
+view/TextItem.java
+ view.TextItem
