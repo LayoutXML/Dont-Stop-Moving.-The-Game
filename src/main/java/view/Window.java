@@ -15,7 +15,6 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class Window {
     public static final String NAME = "Game";
     public static final boolean V_SYNC_ENABLED = true;
@@ -26,6 +25,10 @@ public class Window {
     private int height = 720;
     private boolean resized;
     private long windowId;
+
+    public Window() throws InitializationException {
+        initialize();
+    }
 
     public void initialize() throws InitializationException {
         if (!glfwInit()) {
@@ -78,6 +81,8 @@ public class Window {
         glCullFace(GL_BACK);
 
         glEnable(GL_MULTISAMPLE);
+
+        glfwSetInputMode(windowId, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
         if (POLYGON_MODE) {
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

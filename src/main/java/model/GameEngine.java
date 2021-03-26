@@ -27,7 +27,7 @@ public class GameEngine implements Runnable {
         while (!gameLogic.endGame()) {
             accumulatedTime += timerUtils.getElapsedTime();
 
-            gameLogic.input();
+            gameLogic.handleInput();
 
             while (accumulatedTime >= updateInterval) {
                 gameLogic.update();

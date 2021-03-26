@@ -1,62 +1,62 @@
-view/Status.java
- view.Status
+controller/InputManager.java
+ controller.InputManager
 view/lights/SpotLight.java
  view.lights.SpotLight
 view/Window.java
  view.Window
-model/GameEngine.java
- model.GameEngine
+view/lights/DirectionalLight.java
+ view.lights.DirectionalLight
 model/exceptions/InitializationException.java
  model.exceptions.InitializationException
 view/graphics/Texture.java
  view.graphics.Texture
-model/GameLogic.java
- model.GameLogic
+view/graphics/CharacterInformation.java
+ view.graphics.CharacterInformation
 view/lights/Attenuation.java
  view.lights.Attenuation
-view/GameItem.java
- view.GameItem
-model/OBJLoader.java
- model.OBJLoader
+view/lights/PointLight.java
+ view.lights.PointLight
+view/Camera.java
+ view.Camera
 view/graphics/Face.java
  view.graphics.Face
-view/Skybox.java
- view.Skybox
-view/graphics/Transformation.java
- view.graphics.Transformation
-Main.java
- Main
+view/graphics/Shaders.java
+ view.graphics.Shaders
+view/graphics/IndexGroup.java
+ view.graphics.IndexGroup
+view/graphics/Material.java
+ view.graphics.Material
 model/utils/ResourceUtils.java
  model.utils.ResourceUtils
-controller/InputManager.java
- controller.InputManager
+model/utils/TimerUtils.java
+ model.utils.TimerUtils
+model/exceptions/ResourceException.java
+ model.exceptions.ResourceException
 view/Lights.java
  view.Lights
 view/graphics/FontTexture.java
  view.graphics.FontTexture
-view/graphics/CharacterInformation.java
- view.graphics.CharacterInformation
-view/graphics/IndexGroup.java
- view.graphics.IndexGroup
-view/graphics/Shaders.java
- view.graphics.Shaders
-view/Camera.java
- view.Camera
-view/lights/PointLight.java
- view.lights.PointLight
+view/Status.java
+ view.Status
 view/graphics/Mesh.java
  view.graphics.Mesh
-model/exceptions/ResourceException.java
- model.exceptions.ResourceException
-view/lights/DirectionalLight.java
- view.lights.DirectionalLight
+Main.java
+ Main
+model/GameEngine.java
+ model.GameEngine
 view/RenderEngine.java
  view.RenderEngine
-view/Scene.java
- view.Scene
-view/graphics/Material.java
- view.graphics.Material
-model/utils/TimerUtils.java
- model.utils.TimerUtils
+model/GameLogic.java
+ model.GameLogic
+view/Level.java
+ view.Level
+view/GameItem.java
+ view.GameItem
+model/OBJLoader.java
+ model.OBJLoader
+view/Skybox.java
+ view.Skybox
+view/graphics/Transformation.java
+ view.graphics.Transformation
 view/TextItem.java
  view.TextItem

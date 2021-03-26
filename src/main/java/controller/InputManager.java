@@ -1,5 +1,6 @@
 package controller;
 
+import org.joml.Vector3f;
 import view.Window;
 import lombok.Getter;
 import model.exceptions.InitializationException;
@@ -10,9 +11,14 @@ import static org.lwjgl.glfw.GLFW.*;
 
 @Getter
 public class InputManager {
-    private final Vector2d previousMousePosition = new Vector2d(-1, -1);
+    private static final int KEY_FORWARD = GLFW_KEY_W;
+    private static final int KEY_BACKWARD = GLFW_KEY_S;
+    private static final int KEY_LEFT = GLFW_KEY_A;
+    private static final int KEY_RIGHT = GLFW_KEY_D;
+    private static final int KEY_UP = GLFW_KEY_Q;
+    private static final int KEY_DOWN = GLFW_KEY_Z;
+
     private final Vector2d currentMousePosition = new Vector2d(0, 0);
-    private final Vector2f display = new Vector2f();
 
     private boolean focused;
     private boolean leftMouseButtonPressed;
@@ -38,20 +44,39 @@ public class InputManager {
         }));
     }
 
-    public void mouseInput() {
-        display.set(0, 0);
-        if (focused && previousMousePosition.x >= 0 && previousMousePosition.y >= 0) {
-            double xDelta = currentMousePosition.x - previousMousePosition.x;
-            if (xDelta != 0) {
-                display.y = (float) xDelta;
-            }
-
-            double yDelta = currentMousePosition.y - previousMousePosition.y;
-            if (yDelta != 0) {
-                display.x = (float) yDelta;
-            }
+    public void updateDisplayRotation(Window window, Vector2f displayRotation) {
+        if (!focused) {
+            return; // TODO: improve focus detection
         }
-        previousMousePosition.set(currentMousePosition);
+
+        displayRotation.set(0, 0);
+
+        displayRotation.x = (float) currentMousePosition.y - (float) window.getHeight() / 2; // TODO: invert x axis
+        displayRotation.y = (float) currentMousePosition.x - (float) window.getWidth() / 2;
+
+        glfwSetCursorPos(window.getWindowId(), (double) window.getWidth() / 2, (double) window.getHeight() / 2);
+    }
+
+    public void updateMovementDirection(Window window, Vector3f movementDirection) {
+        movementDirection.set(0, 0, 0);
+
+        if (isKeyPressed(window, KEY_FORWARD)) {
+            movementDirection.z = -1;
+        } else if (isKeyPressed(window, KEY_BACKWARD)) {
+            movementDirection.z = 1;
+        }
+
+        if (isKeyPressed(window, KEY_LEFT)) {
+            movementDirection.x = -1;
+        } else if (isKeyPressed(window, KEY_RIGHT)) {
+            movementDirection.x = 1;
+        }
+
+        if (isKeyPressed(window, KEY_UP)) {
+            movementDirection.y = 1;
+        } else if (isKeyPressed(window, KEY_DOWN)) {
+            movementDirection.y = -1;
+        }
     }
 
     public boolean isKeyPressed(Window window, int key) {

@@ -6,7 +6,7 @@ import lombok.Getter;
 public class TimerUtils {
     private float previousLoopTime;
 
-    public void initialize() {
+    public void reset() {
         previousLoopTime = getTimeInSeconds();
     }
 

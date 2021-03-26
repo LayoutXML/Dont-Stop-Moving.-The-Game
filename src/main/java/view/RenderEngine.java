@@ -32,7 +32,11 @@ public class RenderEngine {
     private Shaders statusShader;
     private Shaders skybox;
 
-    public void initialize(Window window) throws InitializationException, ResourceException {
+    public RenderEngine() throws ResourceException, InitializationException {
+        initialize();
+    }
+
+    public void initialize() throws InitializationException, ResourceException {
         initializeSkybox();
         initializeGameShader();
         initializeStatusShader();
@@ -78,7 +82,7 @@ public class RenderEngine {
         statusShader.createUniform("hasTexture");
     }
 
-    public void render(Window window, Camera camera, Scene scene, Status status) {
+    public void render(Window window, Camera camera, Level level, Status status) {
         clear();
 
         if (window.isResized()) {
@@ -89,12 +93,12 @@ public class RenderEngine {
         transformation.updateProjectionWithPerspective(FIELD_OF_VIEW, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
         transformation.updateCameraView(camera);
 
-        renderScene(window, camera, scene);
-        renderSkybox(window, camera, scene);
+        renderScene(window, camera, level);
+        renderSkybox(window, camera, level);
         renderStatus(window, status);
     }
 
-    private void renderScene(Window window, Camera camera, Scene scene) {
+    private void renderScene(Window window, Camera camera, Level level) {
         shaders.bind();
 
         Matrix4f projection = transformation.getProjection();
@@ -103,10 +107,10 @@ public class RenderEngine {
 
         Matrix4f view = transformation.getView();
 
-        Lights sceneLights = scene.getLights();
+        Lights sceneLights = level.getLights();
         renderLights(view, sceneLights);
 
-        Map<Mesh, List<GameItem>> meshes = scene.getMeshes();
+        Map<Mesh, List<GameItem>> meshes = level.getMeshes();
         for (Mesh mesh : meshes.keySet()) {
             shaders.setUniform("material", mesh.getMaterial());
             mesh.renderList(meshes.get(mesh), this, view);
@@ -120,7 +124,7 @@ public class RenderEngine {
         shaders.setUniform("models", models);
     }
 
-    private void renderSkybox(Window window, Camera camera, Scene scene) {
+    private void renderSkybox(Window window, Camera camera, Level level) {
         skybox.bind();
 
         Matrix4f projection = transformation.getProjection();
@@ -132,10 +136,10 @@ public class RenderEngine {
         view.m31(0);
         view.m32(0);
 
-        Skybox sceneSkybox = scene.getSkybox();
+        Skybox sceneSkybox = level.getSkybox();
         Matrix4f models = transformation.getModelView(sceneSkybox, view);
         skybox.setUniform("models", models);
-        skybox.setUniform("ambient", scene.getLights().getAmbient());
+        skybox.setUniform("ambient", level.getLights().getAmbient());
 
         sceneSkybox.getMesh().render();
 
@@ -143,6 +147,8 @@ public class RenderEngine {
     }
 
     private void renderStatus(Window window, Status status) {
+        status.render(window);
+
         statusShader.bind();
 
         Matrix4f projectionMatrix = transformation.getStatusProjectionMatrix(0, window.getWidth(), window.getHeight(), 0);
