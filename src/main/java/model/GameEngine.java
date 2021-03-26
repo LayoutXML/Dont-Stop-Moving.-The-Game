@@ -1,9 +1,5 @@
 package model;
 
-import controller.InputManager;
-import view.Window;
-import model.exceptions.InitializationException;
-import model.exceptions.ResourceException;
 import model.utils.TimerUtils;
 
 public class GameEngine implements Runnable {
@@ -11,73 +7,37 @@ public class GameEngine implements Runnable {
     public static final int TICK_RATE = 30;
 
     private final TimerUtils timerUtils = new TimerUtils();
-    private final InputManager inputManager = new InputManager();
-    private final Window window;
     private final GameLogic gameLogic;
 
-    public GameEngine(String name, int width, int height, boolean vSyncEnabled, boolean resizable, GameLogic gameLogic) {
-        window = Window.builder()
-                .name(name)
-                .width(width)
-                .height(height)
-                .vSyncEnabled(vSyncEnabled)
-                .resizable(resizable)
-                .build();
+    public GameEngine(GameLogic gameLogic) {
         this.gameLogic = gameLogic;
     }
 
     @Override
     public void run() {
-        try {
-            initialize();
-            loop();
-        } catch (InitializationException | ResourceException exception) {
-            exception.printStackTrace();
-        }
+        loop();
         free();
     }
 
-    private void initialize() throws InitializationException, ResourceException {
-        window.initialize();
-        timerUtils.initialize();
-        inputManager.initialize(window);
-        gameLogic.initialize(window);
-    }
-
+    // Game loop design pattern
     private void loop() {
         float accumulatedTime = 0f;
         float updateInterval = 1f / TICK_RATE;
 
-        while (!window.windowShouldClose()) {
+        while (!gameLogic.endGame()) {
             accumulatedTime += timerUtils.getElapsedTime();
 
-            input();
+            gameLogic.input();
 
             while (accumulatedTime >= updateInterval) {
-                update(updateInterval);
+                gameLogic.update();
                 accumulatedTime -= updateInterval;
             }
 
-            render();
+            gameLogic.render();
 
-            if (!window.isVSyncEnabled()) {
-                synchronize();
-            }
+            synchronize();
         }
-    }
-
-    private void input() {
-        gameLogic.input(inputManager, window);
-        inputManager.mouseInput();
-    }
-
-    private void update(float updateInterval) {
-        gameLogic.update(inputManager, updateInterval);
-    }
-
-    private void render() {
-        gameLogic.render(window);
-        window.update();
     }
 
     private void synchronize() {
@@ -85,7 +45,7 @@ public class GameEngine implements Runnable {
         double endTime = timerUtils.getPreviousLoopTime() + frameTime;
         while (timerUtils.getTimeInSeconds() < endTime) {
             try {
-                Thread.sleep(1); // TODO maybe try to set actual time
+                Thread.sleep(1);
             } catch (InterruptedException ignored) {
             }
         }

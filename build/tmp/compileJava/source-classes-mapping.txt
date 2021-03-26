@@ -4,7 +4,6 @@ view/lights/SpotLight.java
  view.lights.SpotLight
 view/Window.java
  view.Window
- view.Window$WindowBuilder
 model/GameEngine.java
  model.GameEngine
 model/exceptions/InitializationException.java
@@ -23,8 +22,6 @@ view/graphics/Face.java
  view.graphics.Face
 view/Skybox.java
  view.Skybox
-model/GameLogicImpl.java
- model.GameLogicImpl
 view/graphics/Transformation.java
  view.graphics.Transformation
 Main.java

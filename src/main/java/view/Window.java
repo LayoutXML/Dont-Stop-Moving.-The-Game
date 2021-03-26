@@ -2,6 +2,7 @@ package view;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import model.exceptions.InitializationException;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -14,14 +15,15 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 @Getter
 @Setter
-@Builder
+@NoArgsConstructor
 public class Window {
-    private final String name;
-    private final boolean resizable;
-    private final boolean vSyncEnabled;
+    public static final String NAME = "Game";
+    public static final boolean V_SYNC_ENABLED = true;
+    public static final boolean RESIZEABLE = true;
+    public static final boolean POLYGON_MODE = false;
 
-    private int width;
-    private int height;
+    private int width = 1280;
+    private int height = 720;
     private boolean resized;
     private long windowId;
 
@@ -30,7 +32,7 @@ public class Window {
             throw new InitializationException("IE1");
         }
 
-        glfwWindowHint(GLFW_RESIZABLE, resizable ? GL_TRUE : GL_FALSE);
+        glfwWindowHint(GLFW_RESIZABLE, RESIZEABLE ? GL_TRUE : GL_FALSE);
 
         // OSX specific
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -40,7 +42,7 @@ public class Window {
 
         glfwWindowHint(GLFW_SAMPLES, 4);
 
-        windowId = glfwCreateWindow(width, height, name, NULL, NULL);
+        windowId = glfwCreateWindow(width, height, NAME, NULL, NULL);
         if (windowId == NULL) {
             throw new InitializationException("IE2");
         }
@@ -58,7 +60,7 @@ public class Window {
 
         glfwMakeContextCurrent(windowId);
 
-        if (vSyncEnabled) {
+        if (V_SYNC_ENABLED) {
             glfwSwapInterval(1);
         }
 
@@ -77,7 +79,9 @@ public class Window {
 
         glEnable(GL_MULTISAMPLE);
 
-//        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        if (POLYGON_MODE) {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        }
     }
 
     public void setClearColor(float red, float green, float blue, float alpha) {
