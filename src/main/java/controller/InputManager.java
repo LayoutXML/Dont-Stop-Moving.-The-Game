@@ -6,6 +6,11 @@ import lombok.Getter;
 import model.exceptions.InitializationException;
 import org.joml.Vector2d;
 import org.joml.Vector2f;
+import com.sun.jna.Native;
+import com.sun.jna.platform.win32.WinDef.HWND;
+import com.sun.jna.platform.win32.User32;
+
+import java.util.Arrays;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -25,6 +30,8 @@ public class InputManager {
     private boolean focused;
     private boolean leftMouseButtonPressed;
     private boolean rightMouseButtonPressed;
+
+    private boolean firstRotation = true;
 
     public void initialize(Window window) throws InitializationException {
         if (window == null) {
@@ -47,8 +54,14 @@ public class InputManager {
     }
 
     public void updateDisplayRotation(Window window, Vector2f displayRotation) {
-        if (!focused) {
+        if (!focused || !isInGame()) {
             return; // TODO: improve focus detection
+        }
+
+        if (firstRotation) {
+            firstRotation = false;
+            glfwSetCursorPos(window.getWindowId(), (double) window.getWidth() / 2, (double) window.getHeight() / 2);
+            return;
         }
 
         displayRotation.set(0, 0);
@@ -90,5 +103,14 @@ public class InputManager {
             return false;
         }
         return GLFW_PRESS == glfwGetKey(window.getWindowId(), key);
+    }
+
+    private boolean isInGame() {
+        HWND foregroundWindow = User32.INSTANCE.GetForegroundWindow();
+        int length = User32.INSTANCE.GetWindowTextLength(foregroundWindow) + 1;
+        char[] title = new char[length];
+        User32.INSTANCE.GetWindowText(foregroundWindow, title, length);
+
+        return Window.NAME.equals(new String(title, 0, length - 1));
     }
 }
