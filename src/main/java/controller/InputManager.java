@@ -51,8 +51,8 @@ public class InputManager {
 
         displayRotation.set(0, 0);
 
-        displayRotation.x = (float) currentMousePosition.y - (float) window.getHeight() / 2; // TODO: invert x axis
-        displayRotation.y = (float) currentMousePosition.x - (float) window.getWidth() / 2;
+        displayRotation.x = (float) currentMousePosition.y - window.getHeight() / 2; // TODO: invert x axis
+        displayRotation.y = (float) currentMousePosition.x - window.getWidth() / 2;
 
         glfwSetCursorPos(window.getWindowId(), (double) window.getWidth() / 2, (double) window.getHeight() / 2);
     }
