@@ -9,6 +9,7 @@ import org.joml.Vector3f;
 @NoArgsConstructor
 public class Camera {
     public static final float MOUSE_SENSITIVITY = 0.3f;
+    public static final float COLLISION_NEAR = 0.1f;
 
     private float MOVEMENT_SPEED = 0.1f;
 
@@ -56,17 +57,17 @@ public class Camera {
             boolean withinOldBoundsZ = position.z >= boundsZ.x && position.z <= boundsZ.y;
 
             if (!xCollision && withinOldBoundsY && withinOldBoundsZ) {
-                if (newPosition.x >= boundsX.x && newPosition.x <= boundsX.y) {
+                if (newPosition.x + COLLISION_NEAR >= boundsX.x && newPosition.x - COLLISION_NEAR <= boundsX.y) {
                     xCollision = true;
                 }
             }
             if (!yCollision && withinOldBoundsX && withinOldBoundsZ) {
-                if (newPosition.y >= boundsY.x && newPosition.y <= boundsY.y) {
+                if (newPosition.y + COLLISION_NEAR >= boundsY.x && newPosition.y - COLLISION_NEAR <= boundsY.y) {
                     yCollision = true;
                 }
             }
             if (!zCollision && withinOldBoundsX && withinOldBoundsY) {
-                if (newPosition.z >= boundsZ.x && newPosition.z <= boundsZ.y) {
+                if (newPosition.z + COLLISION_NEAR >= boundsZ.x && newPosition.z - COLLISION_NEAR <= boundsZ.y) {
                     zCollision = true;
                 }
             }
