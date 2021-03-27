@@ -110,5 +110,11 @@ public class Camera {
         rotation.x += x;
         rotation.y += y;
         rotation.z += z;
+
+        if (rotation.x < -90) {
+            rotation.x = - 90;
+        } else if (rotation.x > 90) {
+            rotation.x = 90;
+        }
     }
 }

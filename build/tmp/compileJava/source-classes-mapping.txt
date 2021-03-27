@@ -10,8 +10,8 @@ model/exceptions/InitializationException.java
  model.exceptions.InitializationException
 view/graphics/Texture.java
  view.graphics.Texture
-view/TextItem.java
- view.TextItem
+model/GameLogic.java
+ model.GameLogic
 view/lights/Attenuation.java
  view.lights.Attenuation
 view/GameItem.java
@@ -28,8 +28,8 @@ Main.java
  Main
 model/utils/ResourceUtils.java
  model.utils.ResourceUtils
-model/utils/TimerUtils.java
- model.utils.TimerUtils
+controller/InputManager.java
+ controller.InputManager
 view/Level.java
  view.Level
 view/Lights.java
@@ -56,7 +56,7 @@ view/RenderEngine.java
  view.RenderEngine
 view/graphics/Material.java
  view.graphics.Material
-model/GameLogic.java
- model.GameLogic
-controller/InputManager.java
- controller.InputManager
+model/utils/TimerUtils.java
+ model.utils.TimerUtils
+view/TextItem.java
+ view.TextItem
