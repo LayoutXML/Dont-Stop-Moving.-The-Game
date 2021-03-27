@@ -8,7 +8,6 @@ import org.joml.Vector3f;
 import view.*;
 
 public class GameLogic {
-
     private final Window window = new Window();
     private final RenderEngine renderEngine = new RenderEngine();
     private final InputManager inputManager = new InputManager();
@@ -39,7 +38,7 @@ public class GameLogic {
     }
 
     public void update() {
-        camera.update(movementDirection, displayRotation);
+        camera.update(movementDirection, displayRotation, level);
         level.update(camera.getPosition());
         status.update(camera.getPosition());
     }

@@ -1,23 +1,21 @@
 package view;
 
+import lombok.Getter;
+import lombok.Setter;
 import model.OBJLoader;
 import model.exceptions.ResourceException;
 import org.joml.Vector3f;
 import view.graphics.Material;
 import view.graphics.Mesh;
-import lombok.Getter;
-import lombok.Setter;
 import view.graphics.Texture;
 import view.lights.DirectionalLight;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @Setter
 public class Level {
+    private List<GameItem> gameItems = new ArrayList<>();
     private Map<Mesh, List<GameItem>> meshes = new HashMap<>();
     private Skybox skybox;
     private Lights lights;
@@ -39,13 +37,13 @@ public class Level {
                 {0, 0, -3}
         };*/
         float[][] mockCoordinates = {
-                {1, 0, 0}
+                {0, 0, 1}
         };
         List<GameItem> gameItems = new ArrayList<>();
         for (float[] mockCoordinate : mockCoordinates) {
             GameItem gameItem = new GameItem();
             gameItem.setMesh(mesh);
-            gameItem.setScale(0.5f);
+            gameItem.setTextureScale(0.5f);
             gameItem.setPositionFromCoordinates(mockCoordinate[0], mockCoordinate[1], mockCoordinate[2]);
             gameItems.add(gameItem);
         }
@@ -53,7 +51,7 @@ public class Level {
 
         // Setup  SkyBox
         Skybox skyBox = new Skybox("/skybox.obj", "src/textures/skybox.png");
-        skyBox.setScale(50f);
+        skyBox.setTextureScale(50f);
         setSkybox(skyBox);
 
         // Setup Lights
@@ -105,6 +103,8 @@ public class Level {
             Mesh mesh = gameItem.getMesh();
             meshes.computeIfAbsent(mesh, k -> new ArrayList<>()).add(gameItem);
         }
+
+        this.gameItems.addAll(Arrays.asList(gameItems));
     }
 
     public void addGameItems(List<GameItem> gameItems) {
@@ -116,6 +116,8 @@ public class Level {
             Mesh mesh = gameItem.getMesh();
             meshes.computeIfAbsent(mesh, k -> new ArrayList<>()).add(gameItem);
         }
+
+        this.gameItems.addAll(gameItems);
     }
 
     public void update(Vector3f cameraPosition) {

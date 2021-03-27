@@ -22,7 +22,7 @@ public class Transformation {
     public Matrix4f getModelView(GameItem gameItem, Matrix4f view) {
         Vector3f rotation = gameItem.getRotation();
         Vector3f position = gameItem.getPosition();
-        float scale = gameItem.getScale();
+        float scale = gameItem.getTextureScale();
 
         model.identity().translation(position)
                 .rotateX((float) Math.toRadians(-rotation.x))
@@ -53,7 +53,7 @@ public class Transformation {
     public Matrix4f getStatusMatrix(GameItem gameItem, Matrix4f projection) {
         Vector3f rotation = gameItem.getRotation();
         Vector3f position = gameItem.getPosition();
-        float scale = gameItem.getScale();
+        float scale = gameItem.getTextureScale();
 
         model.identity().translate(position)
                 .rotateX((float) Math.toRadians(-rotation.x))
