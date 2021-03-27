@@ -11,7 +11,7 @@ public class Camera {
     public static final float MOUSE_SENSITIVITY = 0.3f;
     public static final float COLLISION_NEAR = 0.1f;
     public static final float PLAYER_HEIGHT_UNDER = 1.5f;
-    public static final float PLAYER_HEIGHT_ABOVE = 0.4f;
+    public static final float PLAYER_HEIGHT_ABOVE = 0.1f;
 
     private float MOVEMENT_SPEED = 0.1f;
 
@@ -39,10 +39,10 @@ public class Camera {
         Vector3f newPosition = calculatePosition(movementDirection);
 
         boolean xCollision = false;
-        boolean yCollision = false;
         boolean zCollision = false;
+        boolean yCollision = false;
         for (GameItem gameItem : level.getGameItems()) {
-            if (xCollision && yCollision && zCollision) {
+            if (xCollision && zCollision && yCollision) {
                 break;
             }
 
@@ -51,27 +51,29 @@ public class Camera {
             }
 
             Vector2f boundsX = gameItem.getBoundsX();
-            Vector2f boundsY = gameItem.getBoundsY();
             Vector2f boundsZ = gameItem.getBoundsZ();
+            Vector2f boundsY = gameItem.getBoundsY();
 
             boolean withinOldBoundsX = position.x >= boundsX.x && position.x <= boundsX.y;
-            boolean withinOldBoundsY = position.y >= boundsY.x && position.y <= boundsY.y;
-            boolean withinOldBoundsYUnder = position.y - 1 >= boundsY.x && position.y - 1 <= boundsY.y;
             boolean withinOldBoundsZ = position.z >= boundsZ.x && position.z <= boundsZ.y;
 
-            if (!xCollision && (withinOldBoundsY || withinOldBoundsYUnder) && withinOldBoundsZ) {
+            float playerTopPoint = position.y + PLAYER_HEIGHT_ABOVE + COLLISION_NEAR;
+            float playerBottomPoint = position.y - PLAYER_HEIGHT_UNDER - COLLISION_NEAR;
+            boolean withinOldBoundsY = (playerTopPoint >= boundsY.x && playerTopPoint <= boundsY.y) || (playerBottomPoint <= boundsY.y && playerBottomPoint >= boundsY.x) || (playerBottomPoint <= boundsY.x && playerTopPoint >= boundsY.y);
+
+            if (!xCollision && withinOldBoundsY && withinOldBoundsZ) {
                 if (newPosition.x + COLLISION_NEAR >= boundsX.x && newPosition.x - COLLISION_NEAR <= boundsX.y) {
                     xCollision = true;
                 }
             }
-            if (!yCollision && withinOldBoundsX && withinOldBoundsZ) {
-                if (newPosition.y + PLAYER_HEIGHT_ABOVE >= boundsY.x && newPosition.y - PLAYER_HEIGHT_UNDER <= boundsY.y) {
-                    yCollision = true;
-                }
-            }
-            if (!zCollision && withinOldBoundsX && (withinOldBoundsY || withinOldBoundsYUnder)) {
+            if (!zCollision && withinOldBoundsX && withinOldBoundsY) {
                 if (newPosition.z + COLLISION_NEAR >= boundsZ.x && newPosition.z - COLLISION_NEAR <= boundsZ.y) {
                     zCollision = true;
+                }
+            }
+            if (!yCollision && withinOldBoundsX && withinOldBoundsZ) {
+                if (newPosition.y + PLAYER_HEIGHT_ABOVE + COLLISION_NEAR >= boundsY.x && newPosition.y - PLAYER_HEIGHT_UNDER - COLLISION_NEAR <= boundsY.y) {
+                    yCollision = true;
                 }
             }
         }
@@ -79,11 +81,11 @@ public class Camera {
         if (!xCollision) {
             position.x = newPosition.x;
         }
-        if (!yCollision) {
-            position.y = newPosition.y;
-        }
         if (!zCollision) {
             position.z = newPosition.z;
+        }
+        if (!yCollision) {
+            position.y = newPosition.y;
         }
     }
 
@@ -116,7 +118,7 @@ public class Camera {
         rotation.z += z;
 
         if (rotation.x < -90) {
-            rotation.x = - 90;
+            rotation.x = -90;
         } else if (rotation.x > 90) {
             rotation.x = 90;
         }

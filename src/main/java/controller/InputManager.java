@@ -1,16 +1,13 @@
 package controller;
 
-import org.joml.Vector3f;
-import view.Window;
+import com.sun.jna.platform.win32.User32;
+import com.sun.jna.platform.win32.WinDef.HWND;
 import lombok.Getter;
 import model.exceptions.InitializationException;
 import org.joml.Vector2d;
 import org.joml.Vector2f;
-import com.sun.jna.Native;
-import com.sun.jna.platform.win32.WinDef.HWND;
-import com.sun.jna.platform.win32.User32;
-
-import java.util.Arrays;
+import org.joml.Vector3f;
+import view.Window;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -55,7 +52,7 @@ public class InputManager {
 
     public void updateDisplayRotation(Window window, Vector2f displayRotation) {
         if (!focused || !isInGame()) {
-            return; // TODO: improve focus detection
+            return;
         }
 
         if (firstRotation) {
