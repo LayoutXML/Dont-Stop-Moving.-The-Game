@@ -21,6 +21,7 @@ public class InputManager {
     private static final int KEY_RIGHT = GLFW_KEY_D;
     private static final int KEY_UP = GLFW_KEY_Q;
     private static final int KEY_DOWN = GLFW_KEY_Z;
+    private static final int KEY_JUMP = GLFW_KEY_SPACE;
 
     private final Vector2d currentMousePosition = new Vector2d(0, 0);
 
@@ -91,8 +92,16 @@ public class InputManager {
                 movementDirection.y = -1;
             }
         } else {
-            movementDirection.y = -1;
+            if (movementDirection.y < 0) {
+                movementDirection.y *= 1.05f;
+            } else {
+                movementDirection.y = -1;
+            }
         }
+    }
+
+    public boolean isJumping(Window window) {
+        return isKeyPressed(window, KEY_JUMP);
     }
 
     public boolean isKeyPressed(Window window, int key) {

@@ -18,6 +18,11 @@ public class Camera {
     private final Vector3f position = new Vector3f();
     private final Vector3f rotation = new Vector3f();
 
+    private static final int JUMP_PROGRESS_MAX = 25;
+    private int jumpProgress = 0;
+    private boolean jumping = false;
+    private boolean onGround = false;
+
     public void setPositionFromCoordinates(float x, float y, float z) {
         position.x = x;
         position.y = y;
@@ -30,9 +35,22 @@ public class Camera {
         rotation.z = z;
     }
 
-    public void update(Vector3f movementDirection, Vector2f displayRotation, Level level) {
+    public void update(Vector3f movementDirection, Vector2f displayRotation, boolean jump, Level level) {
+        updateJump(jump);
         updatePosition(movementDirection, level);
         updateRotation(displayRotation);
+    }
+
+    private void updateJump(boolean jump) {
+        if (jumpProgress >= JUMP_PROGRESS_MAX) {
+            jumpProgress = 0;
+        }
+        if (jumpProgress == 0) {
+            jumping = onGround && jump;
+        }
+        if (jumping) {
+            jumpProgress++;
+        }
     }
 
     private void updatePosition(Vector3f movementDirection, Level level) {
@@ -74,6 +92,10 @@ public class Camera {
             if (!yCollision && withinOldBoundsX && withinOldBoundsZ) {
                 if (newPosition.y + PLAYER_HEIGHT_ABOVE + COLLISION_NEAR >= boundsY.x && newPosition.y - PLAYER_HEIGHT_UNDER - COLLISION_NEAR <= boundsY.y) {
                     yCollision = true;
+
+                    if (movementDirection.y < 0) {
+                        onGround = true;
+                    }
                 }
             }
         }
@@ -86,6 +108,7 @@ public class Camera {
         }
         if (!yCollision) {
             position.y = newPosition.y;
+            onGround = false;
         }
     }
 
@@ -96,8 +119,15 @@ public class Camera {
     public Vector3f calculatePosition(Vector3f movementDirection) {
         Vector3f newPosition = new Vector3f(position);
         float x = MOVEMENT_SPEED * movementDirection.x;
-        float y = MOVEMENT_SPEED * movementDirection.y;
         float z = MOVEMENT_SPEED * movementDirection.z;
+
+        float y = 0;
+        float jumpDifference = JUMP_PROGRESS_MAX - jumpProgress;
+        if (jumpProgress == 0) {
+            y = MOVEMENT_SPEED * movementDirection.y;
+        } else if (jumpDifference != 0) {
+            y = jumpDifference / (10 * JUMP_PROGRESS_MAX);
+        }
 
         if (x != 0) {
             newPosition.x += Math.sin(Math.toRadians(rotation.y - 90)) * -1.0f * x;

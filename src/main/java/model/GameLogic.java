@@ -15,6 +15,7 @@ public class GameLogic {
 
     private final Vector3f movementDirection = new Vector3f();
     private final Vector2f displayRotation = new Vector2f();
+    private boolean jump = false;
 
     private Level level;
     private Status status;
@@ -37,10 +38,11 @@ public class GameLogic {
     public void handleInput() {
         inputManager.updateDisplayRotation(window, displayRotation);
         inputManager.updateMovementDirection(window, movementDirection);
+        jump = inputManager.isJumping(window);
     }
 
     public void update() {
-        camera.update(movementDirection, displayRotation, level);
+        camera.update(movementDirection, displayRotation, jump, level);
         level.update(camera.getPosition());
         status.update(camera.getPosition());
     }
