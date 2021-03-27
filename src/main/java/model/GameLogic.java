@@ -30,6 +30,8 @@ public class GameLogic {
 
         status = new Status();
         status.startTimer();
+
+        camera.setPositionFromCoordinates(0, 2, -1);
     }
 
     public void handleInput() {

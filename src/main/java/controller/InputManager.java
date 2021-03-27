@@ -11,6 +11,8 @@ import static org.lwjgl.glfw.GLFW.*;
 
 @Getter
 public class InputManager {
+    public static final boolean FLYING_ALLOWED = false;
+
     private static final int KEY_FORWARD = GLFW_KEY_W;
     private static final int KEY_BACKWARD = GLFW_KEY_S;
     private static final int KEY_LEFT = GLFW_KEY_A;
@@ -72,9 +74,13 @@ public class InputManager {
             movementDirection.x = 1;
         }
 
-        if (isKeyPressed(window, KEY_UP)) {
-            movementDirection.y = 1;
-        } else if (isKeyPressed(window, KEY_DOWN)) {
+        if (FLYING_ALLOWED) {
+            if (isKeyPressed(window, KEY_UP)) {
+                movementDirection.y = 1;
+            } else if (isKeyPressed(window, KEY_DOWN)) {
+                movementDirection.y = -1;
+            }
+        } else {
             movementDirection.y = -1;
         }
     }
