@@ -72,8 +72,8 @@ public class Camera {
             Vector2f boundsZ = gameItem.getBoundsZ();
             Vector2f boundsY = gameItem.getBoundsY();
 
-            boolean withinOldBoundsX = position.x >= boundsX.x && position.x <= boundsX.y;
-            boolean withinOldBoundsZ = position.z >= boundsZ.x && position.z <= boundsZ.y;
+            boolean withinOldBoundsX = position.x + COLLISION_NEAR >= boundsX.x && position.x - COLLISION_NEAR <= boundsX.y;
+            boolean withinOldBoundsZ = position.z + COLLISION_NEAR >= boundsZ.x && position.z - COLLISION_NEAR <= boundsZ.y;
 
             float playerTopPoint = position.y + PLAYER_HEIGHT_ABOVE + COLLISION_NEAR;
             float playerBottomPoint = position.y - PLAYER_HEIGHT_UNDER - COLLISION_NEAR;
