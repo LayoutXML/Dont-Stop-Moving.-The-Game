@@ -38,13 +38,16 @@ public class LevelLoaderUtils {
 
         file.forEach(line -> {
             String[] tokens = line.split("\\s+");
-            if (tokens.length != 7 || tokens[0].length() == 0) {
+            if (tokens.length != 7 && tokens.length != 1) {
                 try {
                     throw new ResourceException("Level file has invalid structure");
                 } catch (ResourceException e) {
                     e.printStackTrace();
                     return;
                 }
+            }
+            if (tokens.length == 1) {
+                return;
             }
 
             Vector3f position = new Vector3f(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]), Float.parseFloat(tokens[3]));
