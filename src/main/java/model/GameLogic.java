@@ -27,7 +27,7 @@ public class GameLogic {
     public void initialize() throws InitializationException, ResourceException {
         inputManager.initialize(window);
 
-        level = new Level();
+        level = new Level("1.lvl");
 
         status = new Status();
         status.startTimer();

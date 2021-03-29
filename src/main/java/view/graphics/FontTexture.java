@@ -88,7 +88,7 @@ public class FontTexture {
             byteBuffer.put(data, 0, data.length);
             byteBuffer.flip();
         } catch (IOException e) {
-            throw new ResourceException("RE11");
+            throw new ResourceException("Font error");
         }
         texture = new Texture(byteBuffer);
     }

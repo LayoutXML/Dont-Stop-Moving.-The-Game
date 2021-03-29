@@ -18,7 +18,7 @@ public class Face {
 
         String[] tokens = line.split("/");
         if (tokens.length == 0) {
-            throw new ResourceException("RE9");
+            throw new ResourceException("Resource read error");
         }
 
         indexGroup.setIndexPosition(Integer.parseInt(tokens[0]) - 1);

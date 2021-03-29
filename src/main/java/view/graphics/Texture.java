@@ -30,7 +30,7 @@ public class Texture {
 
     public void loadTexture() throws ResourceException {
         if (fileName == null && image == null) {
-            throw new ResourceException("RE2");
+            throw new ResourceException("Texture invalid");
         }
 
         IntBuffer xBuffer;
@@ -51,7 +51,7 @@ public class Texture {
             }
 
             if (byteBuffer == null) {
-                throw new ResourceException("RE3");
+                throw new ResourceException("Texture file read error");
             }
         }
 
@@ -72,7 +72,7 @@ public class Texture {
 
     public void bind() throws ResourceException {
         if (id == 0) {
-            throw new ResourceException("RE4");
+            throw new ResourceException("Texture binding error");
         }
         glBindTexture(GL_TEXTURE_2D, id);
     }

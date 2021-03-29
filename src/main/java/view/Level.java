@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import model.OBJLoader;
 import model.exceptions.ResourceException;
+import model.utils.LevelLoaderUtils;
 import org.joml.Vector3f;
 import view.graphics.Material;
 import view.graphics.Mesh;
@@ -20,31 +21,11 @@ public class Level {
     private Skybox skybox;
     private Lights lights;
 
-    public Level() throws ResourceException {
-        Texture texture = new Texture("src/textures/blocks/stone.png");
-        Mesh mesh = OBJLoader.loadMesh("/cube.obj");
-        Material material = new Material();
-        material.setTexture(texture);
-        material.setReflectance(.1f);
-        mesh.setMaterial(material);
-
-        float[][] mockCoordinates = {
-                {0, -1, -1}, {-1, -1, -1}, {1, -1, -1},
-                {0, -1, -2}, {-1, -1, -2}, {1, -1, -2},
-                {0, -1, -3}, {-1, -1, -3}, {1, -1, -3},
-                {0, -1, -4}, {-1, -1, -4}, {1, -1, -4},
-                {0, -1, -5}, {-1, -1, -5}, {1, -1, -5},
-                {0, 1, -3}, {-1, 0, -3}, {1, 2, -3}
-        };
-        List<GameItem> gameItems = new ArrayList<>();
-        for (float[] mockCoordinate : mockCoordinates) {
-            GameItem gameItem = new GameItem();
-            gameItem.setMesh(mesh);
-            gameItem.setTextureScale(0.5f);
-            gameItem.setPositionFromCoordinates(mockCoordinate[0], mockCoordinate[1], mockCoordinate[2]);
-            gameItems.add(gameItem);
-        }
+    public Level(String fileName) throws ResourceException {
+        List<GameItem> gameItems = LevelLoaderUtils.loadFile(fileName);
         addGameItems(gameItems);
+
+//        setupItems();
 
         // Setup  SkyBox
         Skybox skyBox = new Skybox("/skybox.obj", "src/textures/skybox.png");
@@ -90,6 +71,33 @@ public class Level {
         spotLights= new SpotLight[]{spotLight, new SpotLight(spotLight)};*/
 
     }
+
+   /* private void setupItems() throws ResourceException {
+        Texture stoneTexture = new Texture("src/textures/blocks/stone.png");
+        Mesh mesh = OBJLoader.loadMesh("/cube.obj");
+        Material material = new Material();
+        material.setTexture(stoneTexture);
+        material.setReflectance(.1f);
+        mesh.setMaterial(material);
+
+        float[][] mockCoordinates = {
+                {0, -1, -1}, {-1, -1, -1}, {1, -1, -1},
+                {0, -1, -2}, {-1, -1, -2}, {1, -1, -2},
+                {0, -1, -3}, {-1, -1, -3}, {1, -1, -3},
+                {0, -1, -4}, {-1, -1, -4}, {1, -1, -4},
+                {0, -1, -5}, {-1, -1, -5}, {1, -1, -5},
+                {0, 1, -3}, {-1, 0, -3}, {1, 2, -3}
+        };
+        List<GameItem> gameItems = new ArrayList<>();
+        for (float[] mockCoordinate : mockCoordinates) {
+            GameItem gameItem = new GameItem();
+            gameItem.setMesh(mesh);
+            gameItem.setTextureScale(0.5f);
+            gameItem.setPositionFromCoordinates(mockCoordinate[0], mockCoordinate[1], mockCoordinate[2]);
+            gameItems.add(gameItem);
+        }
+        addGameItems(gameItems);
+    }*/
 
     public void addGameItems(GameItem[] gameItems) {
         if (gameItems == null || gameItems.length == 0) {

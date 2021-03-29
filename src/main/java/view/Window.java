@@ -32,7 +32,7 @@ public class Window {
 
     public void initialize() throws InitializationException {
         if (!glfwInit()) {
-            throw new InitializationException("IE1");
+            throw new InitializationException("Initialization error");
         }
 
         glfwWindowHint(GLFW_RESIZABLE, RESIZEABLE ? GL_TRUE : GL_FALSE);
@@ -41,7 +41,7 @@ public class Window {
 
         windowId = glfwCreateWindow(width, height, NAME, NULL, NULL);
         if (windowId == NULL) {
-            throw new InitializationException("IE2");
+            throw new InitializationException("Window initialization error");
         }
 
         glfwSetFramebufferSizeCallback(windowId, ((window, width, height) -> {

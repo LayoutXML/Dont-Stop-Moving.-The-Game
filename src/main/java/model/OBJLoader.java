@@ -13,7 +13,7 @@ import java.util.List;
 
 public class OBJLoader {
     public static Mesh loadMesh(String fileName) throws ResourceException {
-        List<String> file = ResourceUtils.readFile(fileName);
+        List<String> file = ResourceUtils.readResourceFile(fileName);
 
         List<Vector3f> vertices = new ArrayList<>();
         List<Vector2f> textureCoordinates = new ArrayList<>();
@@ -23,7 +23,7 @@ public class OBJLoader {
         for (String line : file) {
             String[] tokens = line.split("\\s+");
             if (tokens.length == 0) {
-                throw new ResourceException("RE5");
+                throw new ResourceException("Mesh file invalid");
             }
             switch (tokens[0]) {
                 case "v":
@@ -47,21 +47,21 @@ public class OBJLoader {
 
     private static void createVertexOrNormals(List<Vector3f> vertices, String[] tokens) throws ResourceException {
         if (tokens.length < 4) {
-            throw new ResourceException("RE6 " + tokens[0]);
+            throw new ResourceException("Resource file invalid " + tokens[0]);
         }
         vertices.add(new Vector3f(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]), Float.parseFloat(tokens[3])));
     }
 
     private static void createTextureCoordinate(List<Vector2f> textures, String[] tokens) throws ResourceException {
         if (tokens.length < 3) {
-            throw new ResourceException("RE7");
+            throw new ResourceException("Resource file invalid " + tokens[0]);
         }
         textures.add(new Vector2f(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2])));
     }
 
     private static void createFace(List<Face> faces, String[] tokens) throws ResourceException {
         if (tokens.length < 4) {
-            throw new ResourceException("RE8");
+            throw new ResourceException("Resource file invalid " + tokens[0]);
         }
         faces.add(new Face(tokens[1], tokens[2], tokens[3]));
     }

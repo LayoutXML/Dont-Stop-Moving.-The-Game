@@ -33,7 +33,7 @@ public class InputManager {
 
     public void initialize(Window window) throws InitializationException {
         if (window == null) {
-            throw new InitializationException("IE7");
+            throw new InitializationException("No window open");
         }
 
         glfwSetCursorEnterCallback(window.getWindowId(), (windowId, entered) -> focused = entered);

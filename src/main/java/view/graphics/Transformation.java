@@ -5,6 +5,8 @@ import lombok.Getter;
 import view.GameItem;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import view.Skybox;
+import view.TextItem;
 
 @Getter
 public class Transformation {
@@ -34,6 +36,21 @@ public class Transformation {
         return modelView.mul(model);
     }
 
+    public Matrix4f getModelView(Skybox gameItem, Matrix4f view) {
+        Vector3f rotation = gameItem.getRotation();
+        Vector3f position = gameItem.getPosition();
+        float scale = gameItem.getTextureScale();
+
+        model.identity().translation(position)
+                .rotateX((float) Math.toRadians(-rotation.x))
+                .rotateY((float) Math.toRadians(-rotation.y))
+                .rotateZ((float) Math.toRadians(-rotation.z))
+                .scale(scale);
+
+        modelView.set(view);
+        return modelView.mul(model);
+    }
+
     public Matrix4f updateCameraView(Camera camera) {
         Vector3f position = camera.getPosition();
         Vector3f rotation = camera.getRotation();
@@ -50,7 +67,7 @@ public class Transformation {
         return status;
     }
 
-    public Matrix4f getStatusMatrix(GameItem gameItem, Matrix4f projection) {
+    public Matrix4f getStatusMatrix(TextItem gameItem) {
         Vector3f rotation = gameItem.getRotation();
         Vector3f position = gameItem.getPosition();
         float scale = gameItem.getTextureScale();

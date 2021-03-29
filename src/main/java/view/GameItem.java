@@ -1,5 +1,6 @@
 package view;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -9,14 +10,19 @@ import view.graphics.Mesh;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
+@Builder
 public class GameItem {
+    @Builder.Default
     private float textureScale = 1;
+    @Builder.Default
     private float size = 1;
     private Mesh mesh;
+    @Builder.Default
     private boolean solid = true;
-    private final Vector3f position = new Vector3f();
-    private final Vector3f rotation = new Vector3f();
+    @Builder.Default
+    private Vector3f position = new Vector3f();
+    @Builder.Default
+    private Vector3f rotation = new Vector3f();
 
     public void setPositionFromCoordinates(float x, float y, float z) {
         this.position.x = x;

@@ -16,7 +16,7 @@ public class Status {
 
     private final TextItem timerText;
     private final TextItem coordinateText;
-    private final GameItem[] gameItems;
+    private final TextItem[] gameItems;
 
     private final TimerUtils timerUtils = new TimerUtils();
     private final FontTexture fontTexture;
@@ -32,7 +32,7 @@ public class Status {
         coordinateText = new TextItem("0, 0, 0", fontTexture);
         coordinateText.getMesh().getMaterial().setAmbient(new Vector4f(1, 1, 1, 1));
 
-        gameItems = new GameItem[]{timerText, coordinateText};
+        gameItems = new TextItem[]{timerText, coordinateText};
     }
 
     public void startTimer() {
@@ -72,9 +72,8 @@ public class Status {
     }
 
     public void free() {
-        for (GameItem gameItem : gameItems) {
+        for (TextItem gameItem : gameItems) {
             gameItem.free();
         }
     }
-
 }

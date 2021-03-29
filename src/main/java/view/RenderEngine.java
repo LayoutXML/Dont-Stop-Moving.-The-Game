@@ -153,9 +153,9 @@ public class RenderEngine {
 
         Matrix4f projectionMatrix = transformation.getStatusProjectionMatrix(0, window.getWidth(), window.getHeight(), 0);
 
-        for (GameItem gameItem : status.getGameItems()) {
+        for (TextItem gameItem : status.getGameItems()) {
             Mesh mesh = gameItem.getMesh();
-            Matrix4f matrix = transformation.getStatusMatrix(gameItem, projectionMatrix);
+            Matrix4f matrix = transformation.getStatusMatrix(gameItem);
 
             statusShader.setUniform("matrix", matrix);
             statusShader.setUniform("color", mesh.getMaterial().getAmbient());

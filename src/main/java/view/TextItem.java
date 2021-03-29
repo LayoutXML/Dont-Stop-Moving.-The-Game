@@ -1,5 +1,8 @@
 package view;
 
+import lombok.Builder;
+import lombok.Setter;
+import org.joml.Vector3f;
 import view.graphics.CharacterInformation;
 import view.graphics.FontTexture;
 import view.graphics.Material;
@@ -10,16 +13,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class TextItem extends GameItem {
+@Setter
+public class TextItem {
     private static final float Z_COORDINATE = 0f;
     private static final int VERTICES = 4;
 
     private String text;
     private final FontTexture fontTexture;
 
-    public TextItem(String text, FontTexture fontTexture) {
-        super();
+    private float textureScale = 1;
+    private float size = 1;
+    private Mesh mesh;
+    private boolean solid = true;
+    private Vector3f position = new Vector3f();
+    private Vector3f rotation = new Vector3f();
 
+    public TextItem(String text, FontTexture fontTexture) {
         this.text = text;
         this.fontTexture = fontTexture;
 
@@ -97,4 +106,21 @@ public class TextItem extends GameItem {
         generateMesh();
     }
 
+    public void setPositionFromCoordinates(float x, float y, float z) {
+        this.position.x = x;
+        this.position.y = y;
+        this.position.z = z;
+    }
+
+    public void setRotationFromCoordinates(float x, float y, float z) {
+        this.rotation.x = x;
+        this.rotation.y = y;
+        this.rotation.z = z;
+    }
+
+    public void free() {
+        if (mesh != null) {
+            mesh.free();
+        }
+    }
 }

@@ -25,7 +25,7 @@ public class Shaders {
     public Shaders() throws InitializationException {
         programId = glCreateProgram();
         if (programId == 0) {
-            throw new InitializationException("IE3");
+            throw new InitializationException("Shader error");
         }
     }
 
@@ -40,14 +40,14 @@ public class Shaders {
     private int createShader(String shaderCode, int type) throws InitializationException {
         int shaderId = glCreateShader(type);
         if (shaderId == 0) {
-            throw new InitializationException("IE4");
+            throw new InitializationException("Shader error");
         }
 
         glShaderSource(shaderId, shaderCode);
         glCompileShader(shaderId);
 
         if (glGetShaderi(shaderId, GL_COMPILE_STATUS) == 0) {
-            throw new InitializationException("IE5");
+            throw new InitializationException("Shader error");
         }
 
         glAttachShader(programId, shaderId);
@@ -58,7 +58,7 @@ public class Shaders {
     public void createUniform(String name) throws InitializationException {
         int uniformLocation = glGetUniformLocation(programId, name);
         if (uniformLocation < 0) {
-            throw new InitializationException("IE8");
+            throw new InitializationException("Uniform error");
         }
 
         uniformLocations.put(name, uniformLocation);
@@ -186,7 +186,7 @@ public class Shaders {
     public void link() throws InitializationException {
         glLinkProgram(programId);
         if (glGetProgrami(programId, GL_LINK_STATUS) == 0) {
-            throw new InitializationException("IE6");
+            throw new InitializationException("Linking error");
         }
 
         if (vertexShaderId != 0) {
