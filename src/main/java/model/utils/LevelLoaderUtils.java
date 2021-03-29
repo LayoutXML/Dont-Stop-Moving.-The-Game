@@ -1,5 +1,6 @@
 package model.utils;
 
+import model.LevelFromFileWrapper;
 import model.OBJLoader;
 import model.ObjectFromFileWrapper;
 import model.ObjectType;
@@ -27,10 +28,27 @@ public class LevelLoaderUtils {
      * Rotation z
      */
 
-    public static List<GameItem> loadFile(String fileName) throws ResourceException {
+    public static LevelFromFileWrapper loadFile(String fileName) throws ResourceException {
         List<String> file = ResourceUtils.readFile(fileName);
+        if (file.size() < 1) {
+            throw new ResourceException("Level file is empty");
+        }
+
+        Vector3f cameraPosition = parseCameraPosition(file.remove(0));
+
         Map<String, List<ObjectFromFileWrapper>> gameObjects = parseFile(file);
-        return createGameItems(gameObjects);
+        List<GameItem> gameItems = createGameItems(gameObjects);
+
+        return new LevelFromFileWrapper(gameItems, cameraPosition);
+    }
+
+    private static Vector3f parseCameraPosition(String cameraPositionLine) throws ResourceException {
+        String[] tokens = cameraPositionLine.split("\\s+");
+        if (tokens.length != 3) {
+            throw new ResourceException("Level file has invalid structure");
+        }
+
+        return new Vector3f(Float.parseFloat(tokens[0]), Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]));
     }
 
     private static Map<String, List<ObjectFromFileWrapper>> parseFile(List<String> file) {

@@ -64,13 +64,15 @@ public class InputManager {
 
         displayRotation.set(0, 0);
 
-        displayRotation.x = (float) currentMousePosition.y - window.getHeight() / 2; // TODO: invert x axis
+        displayRotation.x = (float) currentMousePosition.y - window.getHeight() / 2;
         displayRotation.y = (float) currentMousePosition.x - window.getWidth() / 2;
 
         glfwSetCursorPos(window.getWindowId(), (double) window.getWidth() / 2, (double) window.getHeight() / 2);
     }
 
-    public void updateMovementDirection(Window window, Vector3f movementDirection) {
+    public void updateMovementDirection(Window window, Vector3f movementDirection, Vector3f positionDelta) {
+        Vector3f previousMovementDirection = new Vector3f(movementDirection);
+
         movementDirection.set(0, 0, 0);
 
         if (isKeyPressed(window, KEY_FORWARD)) {
@@ -92,8 +94,8 @@ public class InputManager {
                 movementDirection.y = -1;
             }
         } else {
-            if (movementDirection.y < 0) {
-                movementDirection.y *= 1.05f;
+            if (positionDelta.y < 0) {
+                movementDirection.y = positionDelta.y * 10.1f;
             } else {
                 movementDirection.y = -1;
             }

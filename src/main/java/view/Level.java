@@ -2,6 +2,7 @@ package view;
 
 import lombok.Getter;
 import lombok.Setter;
+import model.LevelFromFileWrapper;
 import model.OBJLoader;
 import model.exceptions.ResourceException;
 import model.utils.LevelLoaderUtils;
@@ -21,9 +22,13 @@ public class Level {
     private Skybox skybox;
     private Lights lights;
 
+    private Vector3f startingPosition;
+
     public Level(String fileName) throws ResourceException {
-        List<GameItem> gameItems = LevelLoaderUtils.loadFile(fileName);
-        addGameItems(gameItems);
+        LevelFromFileWrapper levelFile =  LevelLoaderUtils.loadFile(fileName);
+        addGameItems(levelFile.getGameItems());
+
+        this.startingPosition = levelFile.getCameraPosition();
 
 //        setupItems();
 

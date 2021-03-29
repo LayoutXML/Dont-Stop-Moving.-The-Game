@@ -2,10 +2,12 @@ package view;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class Camera {
     public static final float MOUSE_SENSITIVITY = 0.3f;
@@ -23,6 +25,12 @@ public class Camera {
     private boolean jumping = false;
     private boolean onGround = false;
 
+    public void setPosition(Vector3f position) {
+        this.position.x = position.x;
+        this.position.y = position.y;
+        this.position.z = position.z;
+    }
+
     public void setPositionFromCoordinates(float x, float y, float z) {
         position.x = x;
         position.y = y;
@@ -35,10 +43,10 @@ public class Camera {
         rotation.z = z;
     }
 
-    public void update(Vector3f movementDirection, Vector2f displayRotation, boolean jump, Level level) {
+    public Vector3f update(Vector3f movementDirection, Vector2f displayRotation, boolean jump, Level level) {
         updateJump(jump);
-        updatePosition(movementDirection, level);
         updateRotation(displayRotation);
+        return updatePosition(movementDirection, level);
     }
 
     private void updateJump(boolean jump) {
@@ -53,7 +61,8 @@ public class Camera {
         }
     }
 
-    private void updatePosition(Vector3f movementDirection, Level level) {
+    private Vector3f updatePosition(Vector3f movementDirection, Level level) {
+        Vector3f previousPosition = new Vector3f(position);
         Vector3f newPosition = calculatePosition(movementDirection);
 
         boolean xCollision = false;
@@ -110,6 +119,8 @@ public class Camera {
             position.y = newPosition.y;
             onGround = false;
         }
+
+        return new Vector3f(position.x - previousPosition.x, position.y - previousPosition.y, position.z - previousPosition.z);
     }
 
     private void updateRotation(Vector2f displayRotation) {
