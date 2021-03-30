@@ -20,12 +20,13 @@ public class Camera {
     public static final float PLAYER_HEIGHT_ABOVE = 0.1f;
     public static final List<ObjectType> REDUCED_FRICTION_OBJECTS = Arrays.asList(ObjectType.ICE, ObjectType.SNOW, ObjectType.GRASS_SNOW);
 
-    private float MOVEMENT_SPEED = 0.1f;
+    private float MOVEMENT_SPEED_REGULAR = 0.1f;
+    private float MOVEMENT_SPEED_AIR = 0.07f;
 
     private final Vector3f position = new Vector3f();
     private final Vector3f rotation = new Vector3f();
 
-    private static final int JUMP_PROGRESS_MAX = 25;
+    private static final int JUMP_PROGRESS_MAX = 15;
     private int jumpProgress = 0;
 
     private static final int FRICTION_PROGRESS_MAX_REGULAR = 7;
@@ -192,14 +193,14 @@ public class Camera {
 
         float maxFrictionProgressX = getMaxFrictionProgress(frictionProgressX);
         float frictionDifferenceX = maxFrictionProgressX - frictionProgressX;
-        float x = MOVEMENT_SPEED * movementDirection.x;
+        float x = movementDirection.x * (onGround ? MOVEMENT_SPEED_REGULAR : MOVEMENT_SPEED_AIR);
         if (frictionDifferenceX != 0 && frictionProgressX != 0) {
             x += (maxFrictionProgressX > 0 ? 1 : -1) * (frictionDifferenceX / maxFrictionProgressX) / 100;
         }
 
         float maxFrictionProgressZ = getMaxFrictionProgress(frictionProgressZ);
         float frictionDifferenceZ = maxFrictionProgressZ - frictionProgressZ;
-        float z = MOVEMENT_SPEED * movementDirection.z;
+        float z = movementDirection.z * (onGround ? MOVEMENT_SPEED_REGULAR : MOVEMENT_SPEED_AIR);
         if (frictionDifferenceZ != 0 && frictionProgressZ != 0) {
             z += (maxFrictionProgressZ > 0 ? 1 : -1) * (frictionDifferenceZ / maxFrictionProgressZ) / 100;
         }
@@ -207,7 +208,7 @@ public class Camera {
         float y = 0;
         float jumpDifference = JUMP_PROGRESS_MAX - jumpProgress;
         if (jumpProgress == 0) {
-            y = MOVEMENT_SPEED * movementDirection.y;
+            y = movementDirection.y * MOVEMENT_SPEED_REGULAR;
         } else if (jumpDifference != 0) {
             y = jumpDifference / (10 * JUMP_PROGRESS_MAX);
         }

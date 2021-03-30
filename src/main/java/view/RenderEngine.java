@@ -19,7 +19,7 @@ import java.util.Map;
 import static org.lwjgl.opengl.GL11.*;
 
 public class RenderEngine {
-    private static final float FIELD_OF_VIEW = (float) Math.toRadians(90d);
+    private static final float FIELD_OF_VIEW = (float) Math.toRadians(70d);
     private static final float Z_FAR = 1000f;
     private static final float Z_NEAR = 0.01f;
     private static final int MAX_POINT_LIGHTS = 5;
