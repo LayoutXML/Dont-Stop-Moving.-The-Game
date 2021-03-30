@@ -3,8 +3,12 @@ package view;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import model.ObjectType;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,6 +18,7 @@ public class Camera {
     public static final float COLLISION_NEAR = 0.1f;
     public static final float PLAYER_HEIGHT_UNDER = 1.5f;
     public static final float PLAYER_HEIGHT_ABOVE = 0.1f;
+    public static final List<ObjectType> REDUCED_FRICTION_OBJECTS = Arrays.asList(ObjectType.ICE, ObjectType.SNOW, ObjectType.GRASS_SNOW);
 
     private float MOVEMENT_SPEED = 0.1f;
 
@@ -22,6 +27,13 @@ public class Camera {
 
     private static final int JUMP_PROGRESS_MAX = 25;
     private int jumpProgress = 0;
+
+    private static final int FRICTION_PROGRESS_MAX_REGULAR = 7;
+    private static final int FRICTION_PROGRESS_MAX_REDUCED = 150;
+    private int frictionProgressX = 0;
+    private int frictionProgressZ = 0;
+    private boolean frictionReduced = false;
+
     private boolean jumping = false;
     private boolean onGround = false;
 
@@ -46,6 +58,7 @@ public class Camera {
     public Vector3f update(Vector3f movementDirection, Vector2f displayRotation, boolean jump, Level level) {
         updateJump(jump);
         updateRotation(displayRotation);
+        updateFriction(movementDirection);
         return updatePosition(movementDirection, level);
     }
 
@@ -58,6 +71,50 @@ public class Camera {
         }
         if (jumping) {
             jumpProgress++;
+        }
+    }
+
+    private void updateRotation(Vector2f displayRotation) {
+        moveRotation(MOUSE_SENSITIVITY * displayRotation.x, MOUSE_SENSITIVITY * displayRotation.y, 0);
+    }
+
+    private void updateFriction(Vector3f movementDirection) {
+        float maxFrictionProgressX = getMaxFrictionProgress(frictionProgressX);
+        if (maxFrictionProgressX > 0) {
+            if (frictionProgressX >= maxFrictionProgressX) {
+                frictionProgressX = 0;
+            }
+        } else {
+            if (frictionProgressX <= maxFrictionProgressX) {
+                frictionProgressX = 0;
+            }
+        }
+
+        float maxFrictionProgressZ = getMaxFrictionProgress(frictionProgressZ);
+        if (maxFrictionProgressZ > 0) {
+            if (frictionProgressZ >= maxFrictionProgressZ) {
+                frictionProgressZ = 0;
+            }
+        } else {
+            if (frictionProgressZ <= maxFrictionProgressZ) {
+                frictionProgressZ = 0;
+            }
+        }
+
+        if (movementDirection.x != 0) {
+            frictionProgressX = (int) movementDirection.x;
+        } else if (frictionProgressX > 0) {
+            frictionProgressX++;
+        } else if (frictionProgressX < 0) {
+            frictionProgressX--;
+        }
+
+        if (movementDirection.z != 0) {
+            frictionProgressZ = (int) movementDirection.z;
+        } else if (frictionProgressZ > 0) {
+            frictionProgressZ++;
+        } else if (frictionProgressZ < 0) {
+            frictionProgressZ--;
         }
     }
 
@@ -104,6 +161,7 @@ public class Camera {
 
                     if (movementDirection.y < 0) {
                         onGround = true;
+                        frictionReduced = REDUCED_FRICTION_OBJECTS.contains(gameItem.getObjectType());
                     }
                 }
             }
@@ -118,19 +176,28 @@ public class Camera {
         if (!yCollision) {
             position.y = newPosition.y;
             onGround = false;
+            frictionReduced = false;
         }
 
         return new Vector3f(position.x - previousPosition.x, position.y - previousPosition.y, position.z - previousPosition.z);
     }
 
-    private void updateRotation(Vector2f displayRotation) {
-        moveRotation(MOUSE_SENSITIVITY * displayRotation.x, MOUSE_SENSITIVITY * displayRotation.y, 0);
-    }
-
     public Vector3f calculatePosition(Vector3f movementDirection) {
         Vector3f newPosition = new Vector3f(position);
+
+        float maxFrictionProgressX = getMaxFrictionProgress(frictionProgressX);
+        float frictionDifferenceX = maxFrictionProgressX - frictionProgressX;
         float x = MOVEMENT_SPEED * movementDirection.x;
+        if (frictionDifferenceX != 0 && frictionProgressX != 0) {
+            x += (maxFrictionProgressX > 0 ? 1 : -1) * (frictionDifferenceX / maxFrictionProgressX) / 100;
+        }
+
+        float maxFrictionProgressZ = getMaxFrictionProgress(frictionProgressZ);
+        float frictionDifferenceZ = maxFrictionProgressZ - frictionProgressZ;
         float z = MOVEMENT_SPEED * movementDirection.z;
+        if (frictionDifferenceZ != 0 && frictionProgressZ != 0) {
+            z += (maxFrictionProgressZ > 0 ? 1 : -1) * (frictionDifferenceZ / maxFrictionProgressZ) / 100;
+        }
 
         float y = 0;
         float jumpDifference = JUMP_PROGRESS_MAX - jumpProgress;
@@ -163,5 +230,19 @@ public class Camera {
         } else if (rotation.x > 90) {
             rotation.x = 90;
         }
+    }
+
+    private float getMaxFrictionProgress(int currentProgress) {
+        if (frictionReduced) {
+            if (currentProgress >= 0) {
+                return FRICTION_PROGRESS_MAX_REDUCED;
+            }
+            return -FRICTION_PROGRESS_MAX_REDUCED;
+        }
+
+        if (currentProgress >= 0) {
+            return FRICTION_PROGRESS_MAX_REGULAR;
+        }
+        return -FRICTION_PROGRESS_MAX_REGULAR;
     }
 }

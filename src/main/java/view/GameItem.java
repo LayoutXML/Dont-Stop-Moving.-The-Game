@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import model.ObjectType;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import view.graphics.Mesh;
@@ -23,6 +24,8 @@ public class GameItem {
     private Vector3f position = new Vector3f();
     @Builder.Default
     private Vector3f rotation = new Vector3f();
+    @Builder.Default
+    private ObjectType objectType = ObjectType.STONE;
 
     public void setPositionFromCoordinates(float x, float y, float z) {
         this.position.x = x;

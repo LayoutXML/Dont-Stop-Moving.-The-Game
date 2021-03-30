@@ -107,6 +107,7 @@ public class LevelLoaderUtils {
                         .solid(true)
                         .position(gameObject.getPosition())
                         .rotation(gameObject.getRotation())
+                        .objectType(objectType)
                         .build());
             });
         }
