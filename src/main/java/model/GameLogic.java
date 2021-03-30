@@ -16,7 +16,9 @@ public class GameLogic {
     private final Vector3f movementDirection = new Vector3f();
     private final Vector2f displayRotation = new Vector2f();
     private Vector3f positionDelta = new Vector3f();
+
     private boolean jump = false;
+    private boolean exit = false;
 
     private Level level;
     private Status status;
@@ -37,6 +39,11 @@ public class GameLogic {
     }
 
     public void handleInput() {
+        if (inputManager.isExit(window)) {
+            exit = true;
+            return;
+        }
+
         inputManager.updateDisplayRotation(window, displayRotation);
         jump = inputManager.isJumping(window);
 
@@ -59,7 +66,7 @@ public class GameLogic {
     }
 
     public boolean endGame() {
-        return window.windowShouldClose();
+        return exit || window.windowShouldClose();
     }
 
     public void free() {

@@ -22,7 +22,9 @@ public class InputManager {
     private static final int KEY_UP = GLFW_KEY_Q;
     private static final int KEY_DOWN = GLFW_KEY_Z;
     private static final int KEY_JUMP = GLFW_KEY_SPACE;
+
     private static final int KEY_RESTART = GLFW_KEY_R;
+    private static final int KEY_EXIT = GLFW_KEY_ESCAPE;
 
     private final Vector2d currentMousePosition = new Vector2d(0, 0);
 
@@ -109,6 +111,10 @@ public class InputManager {
 
     public boolean isRestart(Window window) {
         return isKeyPressed(window, KEY_RESTART);
+    }
+
+    public boolean isExit(Window window) {
+        return isKeyPressed(window, KEY_EXIT);
     }
 
     public boolean isKeyPressed(Window window, int key) {
