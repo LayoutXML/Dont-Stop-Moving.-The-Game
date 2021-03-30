@@ -13,6 +13,8 @@ public class Lava extends GameItem {
     private boolean solid = true;
     private ObjectType objectType = ObjectType.LAVA;
 
+    private boolean dangerous = true;
+
     private Vector3f originalPosition;
     private Vector3f currentPosition;
 

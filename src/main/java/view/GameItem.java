@@ -21,6 +21,8 @@ public abstract class GameItem {
     private Vector3f position = new Vector3f();
     private Vector3f rotation = new Vector3f();
     private ObjectType objectType = ObjectType.STONE;
+    private boolean reducedFriction = false;
+    private boolean dangerous = false;
 
     protected String objectFileName;
     private String textureFileName;

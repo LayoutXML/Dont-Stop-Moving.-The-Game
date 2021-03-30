@@ -12,6 +12,8 @@ public class GrassSnow extends GameItem {
     private boolean solid = true;
     private ObjectType objectType = ObjectType.GRASS_SNOW;
 
+    private boolean reducedFriction = true;
+
     public GrassSnow() throws ResourceException {
         super("/cube.obj", "src/textures/blocks/grass_snow.png", 2f);
     }

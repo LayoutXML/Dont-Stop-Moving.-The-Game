@@ -12,6 +12,8 @@ public class Ice extends GameItem {
     private boolean solid = true;
     private ObjectType objectType = ObjectType.ICE;
 
+    private boolean reducedFriction = true;
+
     public Ice() throws ResourceException {
         super("/cube.obj", "src/textures/blocks/ice.png", 10f);
     }

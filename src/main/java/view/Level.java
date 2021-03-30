@@ -77,33 +77,6 @@ public class Level {
 
     }
 
-   /* private void setupItems() throws ResourceException {
-        Texture stoneTexture = new Texture("src/textures/blocks/stone.png");
-        Mesh mesh = OBJLoader.loadMesh("/cube.obj");
-        Material material = new Material();
-        material.setTexture(stoneTexture);
-        material.setReflectance(.1f);
-        mesh.setMaterial(material);
-
-        float[][] mockCoordinates = {
-                {0, -1, -1}, {-1, -1, -1}, {1, -1, -1},
-                {0, -1, -2}, {-1, -1, -2}, {1, -1, -2},
-                {0, -1, -3}, {-1, -1, -3}, {1, -1, -3},
-                {0, -1, -4}, {-1, -1, -4}, {1, -1, -4},
-                {0, -1, -5}, {-1, -1, -5}, {1, -1, -5},
-                {0, 1, -3}, {-1, 0, -3}, {1, 2, -3}
-        };
-        List<GameItem> gameItems = new ArrayList<>();
-        for (float[] mockCoordinate : mockCoordinates) {
-            GameItem gameItem = new GameItem();
-            gameItem.setMesh(mesh);
-            gameItem.setTextureScale(0.5f);
-            gameItem.setPositionFromCoordinates(mockCoordinate[0], mockCoordinate[1], mockCoordinate[2]);
-            gameItems.add(gameItem);
-        }
-        addGameItems(gameItems);
-    }*/
-
     public void addGameItems(GameItem[] gameItems) {
         if (gameItems == null || gameItems.length == 0) {
             return;
@@ -131,7 +104,7 @@ public class Level {
     }
 
     public void update(Vector3f cameraPosition) {
-        gameItems.forEach(gameItem -> gameItem.update());
+        gameItems.forEach(GameItem::update);
     }
 
     public void free() {

@@ -18,7 +18,6 @@ public class Camera {
     public static final float COLLISION_NEAR = 0.1f;
     public static final float PLAYER_HEIGHT_UNDER = 1.5f;
     public static final float PLAYER_HEIGHT_ABOVE = 0.1f;
-    public static final List<ObjectType> REDUCED_FRICTION_OBJECTS = Arrays.asList(ObjectType.ICE, ObjectType.SNOW, ObjectType.GRASS_SNOW);
 
     private float MOVEMENT_SPEED_REGULAR = 0.1f;
     private float MOVEMENT_SPEED_AIR = 0.07f;
@@ -126,6 +125,9 @@ public class Camera {
         boolean xCollision = false;
         boolean zCollision = false;
         boolean yCollision = false;
+
+        boolean resetPosition = false;
+
         for (GameItem gameItem : level.getGameItems()) {
             if (xCollision && zCollision && yCollision) {
                 break;
@@ -149,20 +151,32 @@ public class Camera {
             if (!xCollision && withinOldBoundsY && withinOldBoundsZ) {
                 if (newPosition.x + COLLISION_NEAR >= boundsX.x && newPosition.x - COLLISION_NEAR <= boundsX.y) {
                     xCollision = true;
+
+                    if (gameItem.isDangerous()) {
+                        resetPosition = true;
+                    }
                 }
             }
             if (!zCollision && withinOldBoundsX && withinOldBoundsY) {
                 if (newPosition.z + COLLISION_NEAR >= boundsZ.x && newPosition.z - COLLISION_NEAR <= boundsZ.y) {
                     zCollision = true;
+
+                    if (gameItem.isDangerous()) {
+                        resetPosition = true;
+                    }
                 }
             }
             if (!yCollision && withinOldBoundsX && withinOldBoundsZ) {
                 if (newPosition.y + PLAYER_HEIGHT_ABOVE + COLLISION_NEAR >= boundsY.x && newPosition.y - PLAYER_HEIGHT_UNDER - COLLISION_NEAR <= boundsY.y) {
                     yCollision = true;
 
+                    if (gameItem.isDangerous()) {
+                        resetPosition = true;
+                    }
+
                     if (movementDirection.y < 0) {
                         onGround = true;
-                        frictionReduced = REDUCED_FRICTION_OBJECTS.contains(gameItem.getObjectType());
+                        frictionReduced = gameItem.isReducedFriction();
                     }
 
                     if (newPosition.y - previousPosition.y > 0) {
@@ -183,6 +197,10 @@ public class Camera {
             position.y = newPosition.y;
             onGround = false;
             frictionReduced = false;
+        }
+
+        if (resetPosition || position.y < 0) {
+            setPosition(level.getStartingPosition());
         }
 
         return new Vector3f(position.x - previousPosition.x, position.y - previousPosition.y, position.z - previousPosition.z);

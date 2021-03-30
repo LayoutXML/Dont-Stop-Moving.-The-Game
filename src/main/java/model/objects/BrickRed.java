@@ -12,6 +12,8 @@ public class BrickRed extends GameItem {
     private boolean solid = true;
     private ObjectType objectType = ObjectType.BRICK_RED;
 
+    private boolean dangerous = true;
+
     public BrickRed() throws ResourceException {
         super("/cube.obj", "src/textures/blocks/brick_red.png", 0.2f);
     }
