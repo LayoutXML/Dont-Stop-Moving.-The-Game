@@ -166,6 +166,7 @@ public class Camera {
 
                     if (newPosition.y - previousPosition.y > 0) {
                         jumpProgress = JUMP_PROGRESS_MAX;
+                        onGround = false;
                     }
                 }
             }
