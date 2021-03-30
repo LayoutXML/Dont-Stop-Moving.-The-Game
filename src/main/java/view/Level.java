@@ -46,7 +46,7 @@ public class Level {
 
         // Directional Light
         float lightIntensity = 1.0f;
-        Vector3f lightPosition = new Vector3f(-50, -100, -50);
+        Vector3f lightPosition = new Vector3f(-50, 4, -50);
         sceneLight.setDirectionalLight(new DirectionalLight(new Vector3f(1, 1, 1), lightPosition, lightIntensity));
 
         /*GameItem gameItem = new GameItem(mesh);

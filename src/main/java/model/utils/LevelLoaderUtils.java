@@ -5,6 +5,7 @@ import model.OBJLoader;
 import model.ObjectFromFileWrapper;
 import model.ObjectType;
 import model.exceptions.ResourceException;
+import model.objects.*;
 import org.joml.Vector3f;
 import view.GameItem;
 import view.graphics.Material;
@@ -101,28 +102,61 @@ public class LevelLoaderUtils {
                 throw new ResourceException("Unknown object type");
             }
 
-            Texture texture = new Texture(objectType.getTextureFileName());
-            Material material = Material.builder()
-                    .texture(texture)
-                    .reflectance(objectType.getReflectance())
-                    .build();
-
-            Mesh mesh = OBJLoader.loadMesh(objectType.getObjectFileName());
-            mesh.setMaterial(material);
-
             gameObjects.get(type).forEach(gameObject -> {
-                gameItems.add(GameItem.builder()
-                        .size(1)
-                        .textureScale(0.5f)
-                        .mesh(mesh)
-                        .solid(true)
-                        .position(gameObject.getPosition())
-                        .rotation(gameObject.getRotation())
-                        .objectType(objectType)
-                        .build());
+                try {
+                    GameItem gameItem = createGameItemByType(objectType);
+                    gameItem.setPosition(gameObject.getPosition());
+                    gameItem.setRotation(gameItem.getRotation());
+
+                    gameItems.add(gameItem);
+                } catch (ResourceException e) {
+                    e.printStackTrace();
+                }
             });
         }
 
         return gameItems;
+    }
+
+    private static GameItem createGameItemByType(ObjectType objectType) throws ResourceException {
+        switch (objectType) {
+            case BRICK_BLUE:
+                return new BrickBlue();
+            case BRICK_GRAY:
+                return new BrickGray();
+            case BRICK_GREEN:
+                return new BrickGreen();
+            case BRICK_LIGHTGREEN:
+                return new BrickLightGreen();
+            case BRICK_PURPLE:
+                return new BrickPurple();
+            case BRICK_RED:
+                return new BrickRed();
+            case BRICK_YELLOW:
+                return new BrickYellow();
+            case DIRT:
+                return new Dirt();
+            case GRASS:
+                return new Grass();
+            case GRASS_DIRT:
+                return new GrassDirt();
+            case GRASS_SNOW:
+                return new GrassSnow();
+            case ICE:
+                return new Ice();
+            case LAVA:
+                return new Lava();
+            case SNOW:
+                return new Snow();
+            case STONE_DARKGRAY:
+                return new StoneDarkGray();
+            case STONE_LIGHTGRAY:
+                return new StoneLightGray();
+            case WATER:
+                return new Water();
+            case STONE:
+            default:
+                return new Stone();
+        }
     }
 }
