@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class LevelLoaderUtils {
 
@@ -31,8 +32,10 @@ public class LevelLoaderUtils {
     public static LevelFromFileWrapper loadFile(String fileName) throws ResourceException {
         List<String> file = ResourceUtils.readFile(fileName);
         if (file.size() < 1) {
-            throw new ResourceException("Level file is empty");
+            throw new ResourceException("Level file is too short");
         }
+
+        file = cleanupFile(file);
 
         Vector3f cameraPosition = parseCameraPosition(file.remove(0));
 
@@ -40,6 +43,17 @@ public class LevelLoaderUtils {
         List<GameItem> gameItems = createGameItems(gameObjects);
 
         return new LevelFromFileWrapper(gameItems, cameraPosition);
+    }
+
+    private static List<String> cleanupFile(List<String> file) throws ResourceException {
+        List<String> cleanFile = file.stream()
+                .map(String::trim)
+                .filter(line -> !line.isEmpty() && !line.startsWith("//"))
+                .collect(Collectors.toList());
+        if (cleanFile.size() < 1) {
+            throw new ResourceException("Level file is too short");
+        }
+        return cleanFile;
     }
 
     private static Vector3f parseCameraPosition(String cameraPositionLine) throws ResourceException {
@@ -63,9 +77,6 @@ public class LevelLoaderUtils {
                     e.printStackTrace();
                     return;
                 }
-            }
-            if (tokens.length == 1) {
-                return;
             }
 
             Vector3f position = new Vector3f(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]), Float.parseFloat(tokens[3]));
