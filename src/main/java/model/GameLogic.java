@@ -38,8 +38,13 @@ public class GameLogic {
 
     public void handleInput() {
         inputManager.updateDisplayRotation(window, displayRotation);
-        inputManager.updateMovementDirection(window, movementDirection, positionDelta);
         jump = inputManager.isJumping(window);
+
+        if (inputManager.isRestart(window)) {
+            camera.setPosition(level.getStartingPosition());
+        } else {
+            inputManager.updateMovementDirection(window, movementDirection, positionDelta);
+        }
     }
 
     public void update() {
