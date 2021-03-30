@@ -131,7 +131,7 @@ public class Level {
     }
 
     public void update(Vector3f cameraPosition) {
-
+        gameItems.forEach(gameItem -> gameItem.update());
     }
 
     public void free() {

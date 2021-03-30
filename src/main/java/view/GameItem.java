@@ -26,10 +26,6 @@ public abstract class GameItem {
     private String textureFileName;
     private float reflectance;
 
-    public GameItem() {
-
-    }
-
     public GameItem(String objectFileName, String textureFileName, float reflectance) throws ResourceException {
         Texture texture = new Texture(textureFileName);
         Material material = Material.builder()
@@ -64,6 +60,8 @@ public abstract class GameItem {
     public Vector2f getBoundsZ() {
         return new Vector2f(position.z - size / 2, position.z + size / 2);
     }
+
+    public void update() {}
 
     public void free() {
         if (mesh != null) {
