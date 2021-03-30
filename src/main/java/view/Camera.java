@@ -163,6 +163,10 @@ public class Camera {
                         onGround = true;
                         frictionReduced = REDUCED_FRICTION_OBJECTS.contains(gameItem.getObjectType());
                     }
+
+                    if (newPosition.y - previousPosition.y > 0) {
+                        jumpProgress = JUMP_PROGRESS_MAX;
+                    }
                 }
             }
         }
