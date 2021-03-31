@@ -1,12 +1,14 @@
 package model.objects;
 
 import lombok.Getter;
+import lombok.Setter;
 import model.ObjectType;
 import model.exceptions.ResourceException;
 import org.joml.Vector3f;
 import view.GameItem;
 
 @Getter
+@Setter
 public class Lava extends GameItem {
     private float textureScale = 0.5f;
     private float size = 1;

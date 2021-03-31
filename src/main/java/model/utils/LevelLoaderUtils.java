@@ -1,16 +1,12 @@
 package model.utils;
 
 import model.LevelFromFileWrapper;
-import model.OBJLoader;
 import model.ObjectFromFileWrapper;
 import model.ObjectType;
 import model.exceptions.ResourceException;
 import model.objects.*;
 import org.joml.Vector3f;
 import view.GameItem;
-import view.graphics.Material;
-import view.graphics.Mesh;
-import view.graphics.Texture;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,9 +21,10 @@ public class LevelLoaderUtils {
      * Position x
      * Position y
      * Position z
-     * Rotation x
-     * Rotation y
-     * Rotation z
+     * Rotation x (optional)
+     * Rotation y (optional)
+     * Rotation z (optional)
+     * scale (optional)
      */
 
     public static LevelFromFileWrapper loadFile(String fileName) throws ResourceException {
@@ -71,7 +68,7 @@ public class LevelLoaderUtils {
 
         file.forEach(line -> {
             String[] tokens = line.split("\\s+");
-            if (tokens.length != 7 && tokens.length != 1) {
+            if (tokens.length != 4 && tokens.length !=7 && tokens.length != 8 && tokens.length != 1) {
                 try {
                     throw new ResourceException("Level file has invalid structure");
                 } catch (ResourceException e) {
@@ -81,8 +78,12 @@ public class LevelLoaderUtils {
             }
 
             Vector3f position = new Vector3f(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]), Float.parseFloat(tokens[3]));
-            Vector3f rotation = new Vector3f(Float.parseFloat(tokens[4]), Float.parseFloat(tokens[5]), Float.parseFloat(tokens[6]));
-            ObjectFromFileWrapper objectFromFileWrapper = new ObjectFromFileWrapper(position, rotation);
+            Vector3f rotation = new Vector3f();
+            if (tokens.length > 4) {
+                rotation = new Vector3f(Float.parseFloat(tokens[4]), Float.parseFloat(tokens[5]), Float.parseFloat(tokens[6]));
+            }
+            float scale = tokens.length == 8 ? Float.parseFloat(tokens[7]) : 1;
+            ObjectFromFileWrapper objectFromFileWrapper = new ObjectFromFileWrapper(position, rotation, scale);
 
             List<ObjectFromFileWrapper> list = gameObjects.computeIfAbsent(tokens[0], k -> new ArrayList<>());
             list.add(objectFromFileWrapper);
@@ -106,7 +107,9 @@ public class LevelLoaderUtils {
                 try {
                     GameItem gameItem = createGameItemByType(objectType);
                     gameItem.setPosition(gameObject.getPosition());
-                    gameItem.setRotation(gameItem.getRotation());
+                    gameItem.setRotation(gameObject.getRotation());
+                    gameItem.setSize(gameObject.getSize());
+                    gameItem.setTextureScale(gameItem.getTextureScale() * gameObject.getSize());
 
                     gameItems.add(gameItem);
                 } catch (ResourceException e) {

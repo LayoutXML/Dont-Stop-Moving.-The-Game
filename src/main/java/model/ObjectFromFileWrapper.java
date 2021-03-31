@@ -11,4 +11,5 @@ import org.joml.Vector3f;
 public class ObjectFromFileWrapper {
     private Vector3f position;
     private Vector3f rotation;
+    private float size;
 }
