@@ -19,4 +19,8 @@ public class Ice extends GameItem {
     public Ice() throws ResourceException {
         super("/cube.obj", "src/textures/blocks/ice.png", 10f);
     }
+
+    public Ice(GameItem gameItem) {
+        super(gameItem.getMesh());
+    }
 }

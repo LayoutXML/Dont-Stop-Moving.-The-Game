@@ -17,4 +17,8 @@ public class BrickLightGreen extends GameItem {
     public BrickLightGreen() throws ResourceException {
         super("/cube.obj", "src/textures/blocks/brick_lightgreen.png", 0.2f);
     }
+
+    public BrickLightGreen(GameItem gameItem) {
+        super(gameItem.getMesh());
+    }
 }

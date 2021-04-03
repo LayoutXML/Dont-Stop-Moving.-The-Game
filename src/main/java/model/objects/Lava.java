@@ -27,6 +27,10 @@ public class Lava extends GameItem {
         super("/cube.obj", "src/textures/blocks/lava.png", 0f);
     }
 
+    public Lava(GameItem gameItem) {
+        super(gameItem.getMesh());
+    }
+
     @Override
     public void update() {
         super.update();

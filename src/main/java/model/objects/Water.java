@@ -17,4 +17,8 @@ public class Water extends GameItem {
     public Water() throws ResourceException {
         super("/cube.obj", "src/textures/blocks/water.png", 10f);
     }
+
+    public Water(GameItem gameItem) {
+        super(gameItem.getMesh());
+    }
 }

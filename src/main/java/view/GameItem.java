@@ -28,6 +28,15 @@ public abstract class GameItem {
     private String textureFileName;
     private float reflectance;
 
+    public GameItem(String objectFileName, Material material) throws ResourceException {
+        mesh = OBJLoader.loadMesh(objectFileName);
+        mesh.setMaterial(material);
+    }
+
+    public GameItem(Mesh mesh) {
+        this.mesh = mesh;
+    }
+
     public GameItem(String objectFileName, String textureFileName, float reflectance) throws ResourceException {
         Texture texture = new Texture(textureFileName);
         Material material = Material.builder()
@@ -63,7 +72,8 @@ public abstract class GameItem {
         return new Vector2f(position.z - size / 2, position.z + size / 2);
     }
 
-    public void update() {}
+    public void update() {
+    }
 
     public void free() {
         if (mesh != null) {

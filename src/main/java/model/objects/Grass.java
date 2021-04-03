@@ -17,4 +17,8 @@ public class Grass extends GameItem {
     public Grass() throws ResourceException {
         super("/cube.obj", "src/textures/blocks/grass.png", 0.1f);
     }
+
+    public Grass(GameItem gameItem) {
+        super(gameItem.getMesh());
+    }
 }

@@ -17,4 +17,8 @@ public class Stone extends GameItem {
     public Stone() throws ResourceException {
         super("/cube.obj", "src/textures/blocks/stone.png", 0.2f);
     }
+
+    public Stone(GameItem gameItem) {
+        super(gameItem.getMesh());
+    }
 }

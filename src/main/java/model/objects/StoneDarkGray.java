@@ -17,4 +17,8 @@ public class StoneDarkGray extends GameItem {
     public StoneDarkGray() throws ResourceException {
         super("/cube.obj", "src/textures/blocks/stone_darkgray.png", 0.2f);
     }
+
+    public StoneDarkGray(GameItem gameItem) {
+        super(gameItem.getMesh());
+    }
 }

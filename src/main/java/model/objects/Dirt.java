@@ -17,4 +17,8 @@ public class Dirt extends GameItem {
     public Dirt() throws ResourceException {
         super("/cube.obj", "src/textures/blocks/dirt.png", 0.1f);
     }
+
+    public Dirt(GameItem gameItem) {
+        super(gameItem.getMesh());
+    }
 }

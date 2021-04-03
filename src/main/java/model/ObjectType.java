@@ -23,5 +23,6 @@ public enum ObjectType {
     STONE,
     STONE_DARKGRAY,
     STONE_LIGHTGRAY,
-    WATER
+    WATER,
+    PROP
 }

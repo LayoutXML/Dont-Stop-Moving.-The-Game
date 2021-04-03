@@ -19,4 +19,8 @@ public class Snow extends GameItem {
     public Snow() throws ResourceException {
         super("/cube.obj", "src/textures/blocks/snow.png", 2f);
     }
+
+    public Snow(GameItem gameItem) {
+        super(gameItem.getMesh());
+    }
 }
