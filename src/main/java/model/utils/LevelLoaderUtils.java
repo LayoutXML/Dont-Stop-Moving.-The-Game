@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class LevelLoaderUtils {
@@ -92,30 +93,54 @@ public class LevelLoaderUtils {
         return gameObjects;
     }
 
-    private static List<GameItem> createGameItems(Map<String, List<ObjectFromFileWrapper>> gameObjects) throws ResourceException {
+    private static List<GameItem> createGameItems(Map<String, List<ObjectFromFileWrapper>> gameObjects) {
         List<GameItem> gameItems = new ArrayList<>();
 
         for (String type : gameObjects.keySet()) {
-            ObjectType objectType;
             try {
-                objectType = ObjectType.valueOf(type);
+                AtomicReference<GameItem> previousGameItem = new AtomicReference<>(null);
+                ObjectType objectType = ObjectType.valueOf(type);
+                gameObjects.get(type).forEach(gameObject -> {
+                    try {
+                        GameItem gameItem = previousGameItem.get() != null
+                                ? createGameItemByTypeAndPreviousItem(objectType, previousGameItem.get())
+                                : createGameItemByType(objectType);
+                        gameItem.setPosition(gameObject.getPosition());
+                        gameItem.setRotation(gameObject.getRotation());
+                        gameItem.setSize(gameObject.getSize());
+                        gameItem.setTextureScale(gameItem.getTextureScale() * gameObject.getSize());
+
+                        gameItems.add(gameItem);
+
+                        if (previousGameItem.get() == null) {
+                            previousGameItem.set(gameItem);
+                        }
+                    } catch (ResourceException e) {
+                        e.printStackTrace();
+                    }
+                });
             } catch (IllegalArgumentException e) {
-                throw new ResourceException("Unknown object type");
+                AtomicReference<GameItem> previousGameItem = new AtomicReference<>(null);
+                gameObjects.get(type).forEach(gameObject -> {
+                    try {
+                        GameItem gameItem = previousGameItem.get() != null
+                                ? new Prop(previousGameItem.get())
+                                : new Prop(type);
+                        gameItem.setPosition(gameObject.getPosition());
+                        gameItem.setRotation(gameObject.getRotation());
+                        gameItem.setSize(gameObject.getSize());
+                        gameItem.setTextureScale(gameItem.getTextureScale() * gameObject.getSize());
+
+                        gameItems.add(gameItem);
+
+                        if (previousGameItem.get() == null) {
+                            previousGameItem.set(gameItem);
+                        }
+                    } catch (ResourceException e1) {
+                        e.printStackTrace();
+                    }
+                });
             }
-
-            gameObjects.get(type).forEach(gameObject -> {
-                try {
-                    GameItem gameItem = createGameItemByType(objectType);
-                    gameItem.setPosition(gameObject.getPosition());
-                    gameItem.setRotation(gameObject.getRotation());
-                    gameItem.setSize(gameObject.getSize());
-                    gameItem.setTextureScale(gameItem.getTextureScale() * gameObject.getSize());
-
-                    gameItems.add(gameItem);
-                } catch (ResourceException e) {
-                    e.printStackTrace();
-                }
-            });
         }
 
         return gameItems;
@@ -160,6 +185,48 @@ public class LevelLoaderUtils {
             case STONE:
             default:
                 return new Stone();
+        }
+    }
+
+    private static GameItem createGameItemByTypeAndPreviousItem(ObjectType objectType, GameItem gameItem) throws ResourceException {
+        switch (objectType) {
+            case BRICK_BLUE:
+                return new BrickBlue(gameItem);
+            case BRICK_GRAY:
+                return new BrickGray(gameItem);
+            case BRICK_GREEN:
+                return new BrickGreen(gameItem);
+            case BRICK_LIGHTGREEN:
+                return new BrickLightGreen(gameItem);
+            case BRICK_PURPLE:
+                return new BrickPurple(gameItem);
+            case BRICK_RED:
+                return new BrickRed(gameItem);
+            case BRICK_YELLOW:
+                return new BrickYellow(gameItem);
+            case DIRT:
+                return new Dirt(gameItem);
+            case GRASS:
+                return new Grass(gameItem);
+            case GRASS_DIRT:
+                return new GrassDirt(gameItem);
+            case GRASS_SNOW:
+                return new GrassSnow(gameItem);
+            case ICE:
+                return new Ice(gameItem);
+            case LAVA:
+                return new Lava(gameItem);
+            case SNOW:
+                return new Snow(gameItem);
+            case STONE_DARKGRAY:
+                return new StoneDarkGray(gameItem);
+            case STONE_LIGHTGRAY:
+                return new StoneLightGray(gameItem);
+            case WATER:
+                return new Water(gameItem);
+            case STONE:
+            default:
+                return new Stone(gameItem);
         }
     }
 }
