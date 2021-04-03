@@ -12,6 +12,7 @@ public class GameLogic {
     private final RenderEngine renderEngine = new RenderEngine();
     private final InputManager inputManager = new InputManager();
     private final Camera camera = new Camera();
+    private final SoundManager soundManager = new SoundManager();
 
     private final Vector3f movementDirection = new Vector3f();
     private final Vector2f displayRotation = new Vector2f();
@@ -36,6 +37,8 @@ public class GameLogic {
         status.startTimer();
 
         camera.setPosition(level.getStartingPosition());
+
+        soundManager.initialize(level);
     }
 
     public void handleInput() {
@@ -54,10 +57,11 @@ public class GameLogic {
         }
     }
 
-    public void update() {
+    public void update() throws ResourceException {
         positionDelta = camera.update(movementDirection, displayRotation, jump, level);
         level.update(camera.getPosition());
         status.update(camera.getPosition());
+        soundManager.update(false);
     }
 
     public void render() {

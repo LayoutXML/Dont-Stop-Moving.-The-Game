@@ -1,5 +1,7 @@
 package model;
 
+import lombok.SneakyThrows;
+import model.exceptions.ResourceException;
 import model.utils.TimerUtils;
 
 public class GameEngine implements Runnable {
@@ -13,6 +15,7 @@ public class GameEngine implements Runnable {
         this.gameLogic = gameLogic;
     }
 
+    @SneakyThrows
     @Override
     public void run() {
         loop();
@@ -20,7 +23,7 @@ public class GameEngine implements Runnable {
     }
 
     // Game loop design pattern
-    private void loop() {
+    private void loop() throws ResourceException {
         float accumulatedTime = 0f;
         float updateInterval = 1f / TICK_RATE;
 
