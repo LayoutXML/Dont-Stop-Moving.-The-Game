@@ -12,14 +12,22 @@ import java.io.FileInputStream;
 
 public class SoundManager {
     private boolean playLava = false;
+    private boolean playingSounds = false;
 
     public void initialize(Level level) throws InitializationException {
         playLava = level.getGameItems().stream().anyMatch(gameItem -> ObjectType.LAVA.equals(gameItem.getObjectType()));
-
-        playSounds();
     }
 
-    public void update(boolean win) throws ResourceException {
+    public void update(boolean win, Level level) throws ResourceException, InitializationException {
+        if (!level.isLevelLoaded()) {
+            return;
+        }
+
+        if (!playingSounds) {
+            playSounds();
+            playingSounds = true;
+        }
+
         if (win) {
             playWinSound();
         }

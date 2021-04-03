@@ -13,7 +13,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 @Getter
 public class InputManager {
-    public static final boolean FLYING_ALLOWED = true;
+    public static final boolean FLYING_ALLOWED = false;
 
     private static final int KEY_FORWARD = GLFW_KEY_W;
     private static final int KEY_BACKWARD = GLFW_KEY_S;

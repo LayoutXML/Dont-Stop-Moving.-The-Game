@@ -21,8 +21,8 @@ public class Level {
     private Map<Mesh, List<GameItem>> meshes = new HashMap<>();
     private Skybox skybox;
     private Lights lights;
-
     private Vector3f startingPosition;
+    private boolean levelLoaded;
 
     public Level(String fileName) throws ResourceException {
         LevelFromFileWrapper levelFile =  LevelLoaderUtils.loadFile(fileName);
@@ -48,6 +48,9 @@ public class Level {
         float lightIntensity = 1.0f;
         Vector3f lightPosition = new Vector3f(-50, 4, -50);
         sceneLight.setDirectionalLight(new DirectionalLight(new Vector3f(1, 1, 1), lightPosition, lightIntensity));
+
+        levelLoaded = true;
+        System.out.println("level loaded");
 
         /*GameItem gameItem = new GameItem(mesh);
         gameItem.setScale(0.5f);
@@ -104,6 +107,9 @@ public class Level {
     }
 
     public void update(Vector3f cameraPosition) {
+        if (!levelLoaded) {
+            return;
+        }
         gameItems.forEach(GameItem::update);
     }
 

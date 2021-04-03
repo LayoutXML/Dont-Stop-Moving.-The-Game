@@ -22,6 +22,7 @@ public class Status {
     private final FontTexture fontTexture;
 
     private Vector3f cameraPosition;
+    private boolean timerStarted = false;
 
     public Status() throws ResourceException {
         fontTexture = new FontTexture(FONT, CHARSET);
@@ -37,6 +38,7 @@ public class Status {
 
     public void startTimer() {
         timerUtils.reset();
+        timerStarted = true;
     }
 
     public void render(Window window) {
@@ -55,7 +57,15 @@ public class Status {
         coordinateText.setPositionFromCoordinates(10f, window.getHeight() - fontTexture.getHeight() - 10, 0);
     }
 
-    public void update(Vector3f cameraPosition) {
+    public void update(Vector3f cameraPosition, Level level) {
+        if (!level.isLevelLoaded()) {
+            return;
+        }
+
+        if (!timerStarted) {
+            startTimer();
+        }
+
         this.cameraPosition = cameraPosition;
     }
 

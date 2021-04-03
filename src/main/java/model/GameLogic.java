@@ -34,7 +34,6 @@ public class GameLogic {
         level = new Level("1.lvl");
 
         status = new Status();
-        status.startTimer();
 
         camera.setPosition(level.getStartingPosition());
 
@@ -57,11 +56,11 @@ public class GameLogic {
         }
     }
 
-    public void update() throws ResourceException {
+    public void update() throws ResourceException, InitializationException {
         positionDelta = camera.update(movementDirection, displayRotation, jump, level);
         level.update(camera.getPosition());
-        status.update(camera.getPosition());
-        soundManager.update(false);
+        status.update(camera.getPosition(), level);
+        soundManager.update(false, level);
     }
 
     public void render() {

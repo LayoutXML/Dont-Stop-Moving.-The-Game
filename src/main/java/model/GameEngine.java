@@ -1,6 +1,7 @@
 package model;
 
 import lombok.SneakyThrows;
+import model.exceptions.InitializationException;
 import model.exceptions.ResourceException;
 import model.utils.TimerUtils;
 
@@ -23,7 +24,7 @@ public class GameEngine implements Runnable {
     }
 
     // Game loop design pattern
-    private void loop() throws ResourceException {
+    private void loop() throws ResourceException, InitializationException {
         float accumulatedTime = 0f;
         float updateInterval = 1f / TICK_RATE;
 

@@ -3,12 +3,8 @@ package view;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import model.ObjectType;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Getter
 @Setter
@@ -56,6 +52,9 @@ public class Camera {
     }
 
     public Vector3f update(Vector3f movementDirection, Vector2f displayRotation, boolean jump, Level level) {
+        if (!level.isLevelLoaded()) {
+            return new Vector3f();
+        }
         updateJump(jump);
         updateRotation(displayRotation);
         updateFriction(movementDirection);
