@@ -12,10 +12,12 @@ import java.io.FileInputStream;
 
 public class SoundManager {
     private boolean playLava = false;
+    private boolean playWater = false;
     private boolean playingSounds = false;
 
-    public void initialize(Level level) throws InitializationException {
+    public void initialize(Level level) {
         playLava = level.getGameItems().stream().anyMatch(gameItem -> ObjectType.LAVA.equals(gameItem.getObjectType()));
+        playWater = level.getGameItems().stream().anyMatch(gameItem -> ObjectType.WATER.equals(gameItem.getObjectType()));
     }
 
     public void update(boolean win, Level level) throws ResourceException, InitializationException {
@@ -29,19 +31,22 @@ public class SoundManager {
         }
 
         if (win) {
-            playWinSound();
+            playSoundSingle("src/sounds/win.wav");
         }
     }
 
     private void playSounds() throws InitializationException {
         if (playLava) {
-            playLavaSound();
+            playSoundLoop("src/sounds/lava.wav");
+        }
+        if (playWater) {
+            playSoundLoop("src/sounds/water.wav");
         }
     }
 
-    private static synchronized void playLavaSound() throws InitializationException {
+    private static synchronized void playSoundLoop(String fileName) throws InitializationException {
         try {
-            AudioInputStream inputStream = AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream("src/sounds/lava.wav")));
+            AudioInputStream inputStream = AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(fileName)));
             Clip clip = AudioSystem.getClip();
             clip.open(inputStream);
             clip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -51,9 +56,9 @@ public class SoundManager {
         }
     }
 
-    private static synchronized void playWinSound() throws ResourceException {
+    private static synchronized void playSoundSingle(String fileName) throws ResourceException {
         try {
-            AudioInputStream inputStream = AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream("src/sounds/win.wav")));
+            AudioInputStream inputStream = AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(fileName)));
             Clip clip = AudioSystem.getClip();
             clip.open(inputStream);
             clip.start();

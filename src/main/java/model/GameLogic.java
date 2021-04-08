@@ -37,7 +37,7 @@ public class GameLogic {
 
         camera.setPosition(level.getStartingPosition());
 
-//        soundManager.initialize(level);
+        soundManager.initialize(level);
     }
 
     public void handleInput() {
