@@ -13,10 +13,8 @@ import view.graphics.Material;
 public class Prop extends GameItem {
     private float textureScale = 1f;
     private float size = 1;
-    private boolean solid = true;
+    private boolean solid = false;
     private ObjectType objectType = ObjectType.PROP;
-
-    private boolean dangerous = true;
 
     public Prop(String name) throws ResourceException {
         super("/props/" + name + ".obj", Material.builder()

@@ -19,6 +19,7 @@ public class GameEngine implements Runnable {
     @SneakyThrows
     @Override
     public void run() {
+        timerUtils.reset();
         loop();
         free();
     }

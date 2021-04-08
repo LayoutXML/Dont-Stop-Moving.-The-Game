@@ -57,10 +57,11 @@ public class GameLogic {
     }
 
     public void update() throws ResourceException, InitializationException {
-        positionDelta = camera.update(movementDirection, displayRotation, jump, level);
+        CameraUpdateWrapper cameraUpdate = camera.update(movementDirection, displayRotation, jump, level);
+        positionDelta = cameraUpdate.getPositionDelta();
         level.update(camera.getPosition());
-        status.update(camera.getPosition(), level);
-        soundManager.update(false, level);
+        status.update(camera.getPosition(), level, cameraUpdate.isPositionReset());
+        soundManager.update(cameraUpdate.isWin(), level);
     }
 
     public void render() {

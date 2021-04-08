@@ -3,6 +3,7 @@ package view;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import model.CameraUpdateWrapper;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
@@ -14,6 +15,7 @@ public class Camera {
     public static final float COLLISION_NEAR = 0.1f;
     public static final float PLAYER_HEIGHT_UNDER = 1.5f;
     public static final float PLAYER_HEIGHT_ABOVE = 0.1f;
+    public static final float FURTHEST_COLLISION_CHECK = 10f;
 
     private float MOVEMENT_SPEED_REGULAR = 0.1f;
     private float MOVEMENT_SPEED_AIR = 0.07f;
@@ -51,9 +53,9 @@ public class Camera {
         rotation.z = z;
     }
 
-    public Vector3f update(Vector3f movementDirection, Vector2f displayRotation, boolean jump, Level level) {
+    public CameraUpdateWrapper update(Vector3f movementDirection, Vector2f displayRotation, boolean jump, Level level) {
         if (!level.isLevelLoaded()) {
-            return new Vector3f();
+            return new CameraUpdateWrapper();
         }
         updateJump(jump);
         updateRotation(displayRotation);
@@ -117,7 +119,7 @@ public class Camera {
         }
     }
 
-    private Vector3f updatePosition(Vector3f movementDirection, Level level) {
+    private CameraUpdateWrapper updatePosition(Vector3f movementDirection, Level level) {
         Vector3f previousPosition = new Vector3f(position);
         Vector3f newPosition = calculatePosition(movementDirection);
 
@@ -125,15 +127,12 @@ public class Camera {
         boolean zCollision = false;
         boolean yCollision = false;
 
-        boolean resetPosition = false;
+        boolean resetPosition = position.y < 0;
+        boolean win = false;
 
-        for (GameItem gameItem : level.getGameItems()) {
+        for (GameItem gameItem : level.getInteractiveGameItems()) {
             if (xCollision && zCollision && yCollision) {
                 break;
-            }
-
-            if (!gameItem.isSolid()) {
-                continue;
             }
 
             Vector2f boundsX = gameItem.getBoundsX();
@@ -154,6 +153,10 @@ public class Camera {
                     if (gameItem.isDangerous()) {
                         resetPosition = true;
                     }
+
+                    if (gameItem.isWin()) {
+                        win = true;
+                    }
                 }
             }
             if (!zCollision && withinOldBoundsX && withinOldBoundsY) {
@@ -163,6 +166,10 @@ public class Camera {
                     if (gameItem.isDangerous()) {
                         resetPosition = true;
                     }
+
+                    if (gameItem.isWin()) {
+                        win = true;
+                    }
                 }
             }
             if (!yCollision && withinOldBoundsX && withinOldBoundsZ) {
@@ -171,6 +178,10 @@ public class Camera {
 
                     if (gameItem.isDangerous()) {
                         resetPosition = true;
+                    }
+
+                    if (gameItem.isWin()) {
+                        win = true;
                     }
 
                     if (movementDirection.y < 0) {
@@ -198,11 +209,15 @@ public class Camera {
             frictionReduced = false;
         }
 
-        if (resetPosition || position.y < 0) {
+        if (resetPosition) {
             setPosition(level.getStartingPosition());
         }
 
-        return new Vector3f(position.x - previousPosition.x, position.y - previousPosition.y, position.z - previousPosition.z);
+        return CameraUpdateWrapper.builder()
+                .positionDelta(new Vector3f(position.x - previousPosition.x, position.y - previousPosition.y, position.z - previousPosition.z))
+                .win(win)
+                .positionReset(resetPosition)
+                .build();
     }
 
     public Vector3f calculatePosition(Vector3f movementDirection) {

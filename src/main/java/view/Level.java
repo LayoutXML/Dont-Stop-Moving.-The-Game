@@ -13,11 +13,13 @@ import view.graphics.Texture;
 import view.lights.DirectionalLight;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
 public class Level {
     private List<GameItem> gameItems = new ArrayList<>();
+    private List<GameItem> interactiveGameItems = new ArrayList<>();
     private Map<Mesh, List<GameItem>> meshes = new HashMap<>();
     private Skybox skybox;
     private Lights lights;
@@ -90,7 +92,9 @@ public class Level {
             meshes.computeIfAbsent(mesh, k -> new ArrayList<>()).add(gameItem);
         }
 
-        this.gameItems.addAll(Arrays.asList(gameItems));
+        List<GameItem> gameItemList = Arrays.asList(gameItems);
+        this.gameItems.addAll(gameItemList);
+        this.interactiveGameItems.addAll(gameItemList.stream().filter(GameItem::isSolid).collect(Collectors.toList()));
     }
 
     public void addGameItems(List<GameItem> gameItems) {
@@ -104,13 +108,14 @@ public class Level {
         }
 
         this.gameItems.addAll(gameItems);
+        this.interactiveGameItems.addAll(gameItems.stream().filter(GameItem::isSolid).collect(Collectors.toList()));
     }
 
     public void update(Vector3f cameraPosition) {
         if (!levelLoaded) {
             return;
         }
-        gameItems.forEach(GameItem::update);
+        interactiveGameItems.forEach(GameItem::update);
     }
 
     public void free() {

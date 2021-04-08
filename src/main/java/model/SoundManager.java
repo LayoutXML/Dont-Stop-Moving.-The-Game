@@ -16,8 +16,8 @@ public class SoundManager {
     private boolean playingSounds = false;
 
     public void initialize(Level level) {
-        playLava = level.getGameItems().stream().anyMatch(gameItem -> ObjectType.LAVA.equals(gameItem.getObjectType()));
-        playWater = level.getGameItems().stream().anyMatch(gameItem -> ObjectType.WATER.equals(gameItem.getObjectType()));
+        playLava = level.getInteractiveGameItems().stream().anyMatch(gameItem -> ObjectType.LAVA.equals(gameItem.getObjectType()));
+        playWater = level.getInteractiveGameItems().stream().anyMatch(gameItem -> ObjectType.WATER.equals(gameItem.getObjectType()));
     }
 
     public void update(boolean win, Level level) throws ResourceException, InitializationException {

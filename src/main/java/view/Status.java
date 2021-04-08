@@ -57,12 +57,12 @@ public class Status {
         coordinateText.setPositionFromCoordinates(10f, window.getHeight() - fontTexture.getHeight() - 10, 0);
     }
 
-    public void update(Vector3f cameraPosition, Level level) {
+    public void update(Vector3f cameraPosition, Level level, boolean positionReset) {
         if (!level.isLevelLoaded()) {
             return;
         }
 
-        if (!timerStarted) {
+        if (!timerStarted || positionReset) {
             startTimer();
         }
 
@@ -78,6 +78,9 @@ public class Status {
     }
 
     private String generateCoordinateText(Vector3f cameraPosition) {
+        if (cameraPosition == null) {
+            return "";
+        }
         return String.format("%.2f, %.2f, %.2f", cameraPosition.x, cameraPosition.y, cameraPosition.z);
     }
 
