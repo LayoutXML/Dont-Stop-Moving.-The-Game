@@ -23,6 +23,7 @@ public abstract class GameItem {
     private ObjectType objectType = ObjectType.STONE;
     private boolean reducedFriction = false;
     private boolean dangerous = false;
+    private boolean win = false;
 
     protected String objectFileName;
     private String textureFileName;
