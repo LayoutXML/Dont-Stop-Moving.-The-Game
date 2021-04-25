@@ -24,20 +24,16 @@ public class GameLogic {
     private Level level;
     private Status status;
 
-    public GameLogic() throws ResourceException, InitializationException {
-        initialize();
+    public GameLogic(String levelName) throws ResourceException, InitializationException {
+        initialize(levelName);
     }
 
-    public void initialize() throws InitializationException, ResourceException {
+    public void initialize(String levelName) throws InitializationException, ResourceException {
         inputManager.initialize(window);
-
-        level = new Level("1.lvl");
-
+        level = new Level(levelName);
         status = new Status();
-
-        camera.setPosition(level.getStartingPosition());
-
         soundManager.initialize(level);
+        camera.setPosition(level.getStartingPosition());
     }
 
     public void handleInput() {
@@ -80,6 +76,8 @@ public class GameLogic {
         if (status != null) {
             status.free();
         }
+        soundManager.free();
         renderEngine.free();
+        window.free();
     }
 }

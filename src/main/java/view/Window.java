@@ -1,8 +1,6 @@
 package view;
 
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import model.exceptions.InitializationException;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -16,7 +14,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 @Getter
 @Setter
 public class Window {
-    public static final String NAME = "Game";
+    public static final String NAME = "Don't stop moving!";
     public static final boolean V_SYNC_ENABLED = true;
     public static final boolean RESIZEABLE = true;
     public static final boolean POLYGON_MODE = false;
@@ -94,5 +92,9 @@ public class Window {
     public void update() {
         glfwSwapBuffers(windowId);
         glfwPollEvents();
+    }
+
+    public void free() {
+        glfwDestroyWindow(windowId);
     }
 }
