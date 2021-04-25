@@ -23,7 +23,6 @@ public class GameLogic {
     private boolean jump = false;
     private boolean exit = false;
     private boolean win = false;
-    private boolean showingResults = false;
 
     private Level level;
     private Status status;
@@ -56,15 +55,16 @@ public class GameLogic {
         }
     }
 
+    // Update method design pattern
     public void update() throws ResourceException, InitializationException {
         if (!win) {
             CameraUpdateWrapper cameraUpdate = camera.update(movementDirection, displayRotation, jump, level);
             positionDelta = cameraUpdate.getPositionDelta();
-            level.update(camera.getPosition());
+            level.update();
             status.update(camera.getPosition(), level, cameraUpdate.isPositionReset());
             soundManager.update(cameraUpdate.isWin(), level);
             win = cameraUpdate.isWin();
-        } else if (!showingResults) {
+        } else {
             showResults(status.getTimerText().getText());
         }
     }

@@ -27,7 +27,7 @@ public class BrickYellow extends GameItem {
         super(gameItem.getMesh());
     }
 
-
+    // Update method design pattern
     @Override
     public void update() {
         super.update();

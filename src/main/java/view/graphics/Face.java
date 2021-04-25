@@ -5,7 +5,7 @@ import model.exceptions.ResourceException;
 
 @Getter
 public class Face {
-    private IndexGroup[] faceVertexIndexes = new IndexGroup[3];
+    private final IndexGroup[] faceVertexIndexes = new IndexGroup[3];
 
     public Face(String line0, String line1, String line2) throws ResourceException {
         faceVertexIndexes[0] = parseLine(line0);

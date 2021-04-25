@@ -16,10 +16,4 @@ public class SpotLight {
         direction = new Vector3f(spotLight.getDirection());
         cutoff = spotLight.getCutoff();
     }
-
-    public SpotLight(PointLight pointLight, Vector3f direction, float cutoffAngle) {
-        this.pointLight = pointLight;
-        this.direction = direction;
-        this.cutoff = (float) Math.cos(Math.toRadians(cutoffAngle));
-    }
 }

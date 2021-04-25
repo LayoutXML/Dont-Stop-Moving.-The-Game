@@ -3,13 +3,10 @@ package view;
 import lombok.Getter;
 import lombok.Setter;
 import model.LevelFromFileWrapper;
-import model.OBJLoader;
 import model.exceptions.ResourceException;
 import model.utils.LevelLoaderUtils;
 import org.joml.Vector3f;
-import view.graphics.Material;
 import view.graphics.Mesh;
-import view.graphics.Texture;
 import view.lights.DirectionalLight;
 
 import java.util.*;
@@ -27,12 +24,10 @@ public class Level {
     private boolean levelLoaded;
 
     public Level(String fileName) throws ResourceException {
-        LevelFromFileWrapper levelFile =  LevelLoaderUtils.loadFile(fileName);
+        LevelFromFileWrapper levelFile = LevelLoaderUtils.loadFile(fileName);
         addGameItems(levelFile.getGameItems());
 
         this.startingPosition = levelFile.getCameraPosition();
-
-//        setupItems();
 
         // Setup  SkyBox
         Skybox skyBox = new Skybox("/skybox.obj", "src/textures/skybox.png");
@@ -52,49 +47,6 @@ public class Level {
         sceneLight.setDirectionalLight(new DirectionalLight(new Vector3f(1, 1, 1), lightPosition, lightIntensity));
 
         levelLoaded = true;
-        System.out.println("level loaded");
-
-        /*GameItem gameItem = new GameItem(mesh);
-        gameItem.setScale(0.5f);
-        gameItem.setPositionFromCoordinates(0, -1, -1);
-
-        GameItem gameItem1 = new GameItem(mesh);
-        gameItem1.setScale(0.5f);
-        gameItem1.setPositionFromCoordinates(0, -1, -2);
-
-        GameItem gameItem2 = new GameItem(mesh);
-        gameItem2.setScale(0.5f);
-        gameItem2.setPositionFromCoordinates(0, -1, -3);*/
-
-//        gameItems = new GameItem[]{gameItem, gameItem1, gameItem2};
-
-        // TODO: refactor
-        /*Vector3f lightPosition = new Vector3f(1, 1, 1);
-        PointLight pointLight = new PointLight(lightPosition, new Vector3f(0, 0, 1), 1f, new Attenuation(0f, 0f, 1f));
-        pointLights = new PointLight[]{pointLight};
-
-        Vector3f lightPosition = new Vector3f(0, 0.0f, 10f);
-        pointLight = new PointLight(new Vector3f(1, 1, 1), lightPosition, 1f, new Attenuation(0f, 0f, 0.02f));
-        Vector3f coneDir = new Vector3f(0, 0, -1);
-        float cutoff = (float) Math.cos(Math.toRadians(140));
-        SpotLight spotLight = new SpotLight(pointLight, coneDir, cutoff);
-        spotLights= new SpotLight[]{spotLight, new SpotLight(spotLight)};*/
-
-    }
-
-    public void addGameItems(GameItem[] gameItems) {
-        if (gameItems == null || gameItems.length == 0) {
-            return;
-        }
-
-        for (GameItem gameItem : gameItems) {
-            Mesh mesh = gameItem.getMesh();
-            meshes.computeIfAbsent(mesh, k -> new ArrayList<>()).add(gameItem);
-        }
-
-        List<GameItem> gameItemList = Arrays.asList(gameItems);
-        this.gameItems.addAll(gameItemList);
-        this.interactiveGameItems.addAll(gameItemList.stream().filter(GameItem::isSolid).collect(Collectors.toList()));
     }
 
     public void addGameItems(List<GameItem> gameItems) {
@@ -111,7 +63,8 @@ public class Level {
         this.interactiveGameItems.addAll(gameItems.stream().filter(GameItem::isSolid).collect(Collectors.toList()));
     }
 
-    public void update(Vector3f cameraPosition) {
+    // Update method design pattern
+    public void update() {
         if (!levelLoaded) {
             return;
         }

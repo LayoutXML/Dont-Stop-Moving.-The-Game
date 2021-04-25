@@ -1,17 +1,17 @@
 package view;
 
+import model.exceptions.InitializationException;
+import model.exceptions.ResourceException;
+import model.utils.ResourceUtils;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 import view.graphics.Mesh;
 import view.graphics.Shaders;
 import view.graphics.Transformation;
 import view.lights.DirectionalLight;
 import view.lights.PointLight;
 import view.lights.SpotLight;
-import model.exceptions.InitializationException;
-import model.exceptions.ResourceException;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
-import model.utils.ResourceUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -24,8 +24,7 @@ public class RenderEngine {
     private static final float Z_NEAR = 0.01f;
     private static final int MAX_POINT_LIGHTS = 5;
     private static final int MAX_SPOT_LIGHTS = 5;
-
-    private final float specular = 10f;
+    private static final float SPECULAR_LIGHT = 10f;
 
     private final Transformation transformation = new Transformation();
     private Shaders shaders;
@@ -86,19 +85,19 @@ public class RenderEngine {
         clear();
 
         if (window.isResized()) {
-            glViewport(0, 0, window.getWidth(), window.getHeight()); // TODO try to move this to window class
+            glViewport(0, 0, window.getWidth(), window.getHeight());
             window.setResized(false);
         }
 
         transformation.updateProjectionWithPerspective(FIELD_OF_VIEW, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
         transformation.updateCameraView(camera);
 
-        renderScene(window, camera, level);
-        renderSkybox(window, camera, level);
+        renderScene(level);
+        renderSkybox(level);
         renderStatus(window, status);
     }
 
-    private void renderScene(Window window, Camera camera, Level level) {
+    private void renderScene(Level level) {
         shaders.bind();
 
         Matrix4f projection = transformation.getProjection();
@@ -124,7 +123,7 @@ public class RenderEngine {
         shaders.setUniform("models", models);
     }
 
-    private void renderSkybox(Window window, Camera camera, Level level) {
+    private void renderSkybox(Level level) {
         skybox.bind();
 
         Matrix4f projection = transformation.getProjection();
@@ -151,8 +150,6 @@ public class RenderEngine {
 
         statusShader.bind();
 
-        Matrix4f projectionMatrix = transformation.getStatusProjectionMatrix(0, window.getWidth(), window.getHeight(), 0);
-
         for (TextItem gameItem : status.getGameItems()) {
             Mesh mesh = gameItem.getMesh();
             Matrix4f matrix = transformation.getStatusMatrix(gameItem);
@@ -169,7 +166,7 @@ public class RenderEngine {
 
     private void renderLights(Matrix4f view, Lights lights) {
         shaders.setUniform("ambient", lights.getAmbient());
-        shaders.setUniform("specular", specular);
+        shaders.setUniform("specular", SPECULAR_LIGHT);
 
         renderPointLights(view, lights.getPointLights());
         renderSpotLights(view, lights.getSpotLights());

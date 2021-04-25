@@ -1,11 +1,11 @@
 package view;
 
-import org.joml.Vector3f;
-import view.graphics.FontTexture;
 import lombok.Getter;
 import model.exceptions.ResourceException;
-import org.joml.Vector4f;
 import model.utils.TimerUtils;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
+import view.graphics.FontTexture;
 
 import java.awt.*;
 
@@ -57,6 +57,7 @@ public class Status {
         coordinateText.setPositionFromCoordinates(10f, window.getHeight() - fontTexture.getHeight() - 10, 0);
     }
 
+    // Update method design pattern
     public void update(Vector3f cameraPosition, Level level, boolean positionReset) {
         if (!level.isLevelLoaded()) {
             return;

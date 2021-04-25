@@ -17,13 +17,14 @@ public class SoundManager {
     private boolean playLava = false;
     private boolean playWater = false;
     private boolean playingSounds = false;
-    private static List<Clip> runningSounds = new ArrayList<>();
+    private static final List<Clip> runningSounds = new ArrayList<>();
 
     public void initialize(Level level) {
         playLava = level.getInteractiveGameItems().stream().anyMatch(gameItem -> ObjectType.LAVA.equals(gameItem.getObjectType()));
         playWater = level.getInteractiveGameItems().stream().anyMatch(gameItem -> ObjectType.WATER.equals(gameItem.getObjectType()));
     }
 
+    // Update method design pattern
     public void update(boolean win, Level level) throws ResourceException, InitializationException {
         if (!level.isLevelLoaded()) {
             return;

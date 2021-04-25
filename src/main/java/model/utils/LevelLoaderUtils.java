@@ -69,7 +69,7 @@ public class LevelLoaderUtils {
 
         file.forEach(line -> {
             String[] tokens = line.split("\\s+");
-            if (tokens.length != 4 && tokens.length !=7 && tokens.length != 8 && tokens.length != 1) {
+            if (tokens.length != 4 && tokens.length != 7 && tokens.length != 8 && tokens.length != 1) {
                 try {
                     throw new ResourceException("Level file has invalid structure");
                 } catch (ResourceException e) {
@@ -188,7 +188,7 @@ public class LevelLoaderUtils {
         }
     }
 
-    private static GameItem createGameItemByTypeAndPreviousItem(ObjectType objectType, GameItem gameItem) throws ResourceException {
+    private static GameItem createGameItemByTypeAndPreviousItem(ObjectType objectType, GameItem gameItem) {
         switch (objectType) {
             case BRICK_BLUE:
                 return new BrickBlue(gameItem);

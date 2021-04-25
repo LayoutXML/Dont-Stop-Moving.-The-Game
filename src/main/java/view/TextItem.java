@@ -1,13 +1,12 @@
 package view;
 
-import lombok.Builder;
+import lombok.Getter;
 import lombok.Setter;
 import org.joml.Vector3f;
 import view.graphics.CharacterInformation;
 import view.graphics.FontTexture;
 import view.graphics.Material;
 import view.graphics.Mesh;
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +35,7 @@ public class TextItem {
     }
 
     private void generateMesh() {
-        List<Float> positions = new ArrayList<>(); // TODO: refactor to arrays of size text.length * 4 or 6
+        List<Float> positions = new ArrayList<>();
         List<Float> coordinates = new ArrayList<>();
         List<Integer> indexes = new ArrayList<>();
         float[] normals = new float[0];
@@ -110,12 +109,6 @@ public class TextItem {
         this.position.x = x;
         this.position.y = y;
         this.position.z = z;
-    }
-
-    public void setRotationFromCoordinates(float x, float y, float z) {
-        this.rotation.x = x;
-        this.rotation.y = y;
-        this.rotation.z = z;
     }
 
     public void free() {

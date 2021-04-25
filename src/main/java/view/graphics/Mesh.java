@@ -1,11 +1,11 @@
 package view.graphics;
 
-import view.RenderEngine;
 import lombok.Getter;
 import lombok.Setter;
-import view.GameItem;
 import org.joml.Matrix4f;
 import org.lwjgl.system.MemoryUtil;
+import view.GameItem;
+import view.RenderEngine;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -158,9 +158,5 @@ public class Mesh {
 
         glBindVertexArray(0);
         glDeleteVertexArrays(vertexArraysId);
-    }
-
-    public boolean hasTexture() {
-        return material != null && material.getTexture() != null;
     }
 }

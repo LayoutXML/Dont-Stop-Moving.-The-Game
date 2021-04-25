@@ -1,15 +1,13 @@
 package view;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import model.OBJLoader;
+import model.exceptions.ResourceException;
 import org.joml.Vector3f;
 import view.graphics.Material;
 import view.graphics.Mesh;
 import view.graphics.Texture;
-import model.OBJLoader;
-import view.GameItem;
-import model.exceptions.ResourceException;
 
 @Getter
 @Setter
@@ -38,12 +36,6 @@ public class Skybox {
         this.position.x = x;
         this.position.y = y;
         this.position.z = z;
-    }
-
-    public void setRotationFromCoordinates(float x, float y, float z) {
-        this.rotation.x = x;
-        this.rotation.y = y;
-        this.rotation.z = z;
     }
 
     public void free() {

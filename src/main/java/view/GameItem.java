@@ -49,18 +49,6 @@ public abstract class GameItem {
         mesh.setMaterial(material);
     }
 
-    public void setPositionFromCoordinates(float x, float y, float z) {
-        this.position.x = x;
-        this.position.y = y;
-        this.position.z = z;
-    }
-
-    public void setRotationFromCoordinates(float x, float y, float z) {
-        this.rotation.x = x;
-        this.rotation.y = y;
-        this.rotation.z = z;
-    }
-
     public Vector2f getBoundsX() {
         return new Vector2f(position.x - size / 2, position.x + size / 2);
     }
@@ -73,6 +61,7 @@ public abstract class GameItem {
         return new Vector2f(position.z - size / 2, position.z + size / 2);
     }
 
+    // Update method design pattern
     public void update() {
     }
 

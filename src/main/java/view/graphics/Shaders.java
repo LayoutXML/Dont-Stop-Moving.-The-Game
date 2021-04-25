@@ -1,13 +1,13 @@
 package view.graphics;
 
-import view.lights.DirectionalLight;
-import view.lights.PointLight;
-import view.lights.SpotLight;
 import model.exceptions.InitializationException;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.system.MemoryStack;
+import view.lights.DirectionalLight;
+import view.lights.PointLight;
+import view.lights.SpotLight;
 
 import java.nio.FloatBuffer;
 import java.util.HashMap;
@@ -16,7 +16,6 @@ import java.util.Map;
 import static org.lwjgl.opengl.GL20C.*;
 
 public class Shaders {
-
     private final int programId;
     private int vertexShaderId;
     private int fragmentShaderId;
@@ -134,16 +133,6 @@ public class Shaders {
         glUniform4f(location, value.x, value.y, value.z, value.w);
     }
 
-    public void setUniform(String name, PointLight[] pointLights) {
-        if (pointLights == null || pointLights.length == 0) {
-            return;
-        }
-
-        for (int i = 0; i < pointLights.length; i++) {
-            setUniform(name + "[" + i + "]", pointLights[i]);
-        }
-    }
-
     public void setUniform(String name, PointLight pointLight) {
         setUniform(name + ".color", pointLight.getColor());
         setUniform(name + ".position", pointLight.getPosition());
@@ -151,16 +140,6 @@ public class Shaders {
         setUniform(name + ".attenuation.constant", pointLight.getAttenuation().getConstant());
         setUniform(name + ".attenuation.linear", pointLight.getAttenuation().getLinear());
         setUniform(name + ".attenuation.exponent", pointLight.getAttenuation().getExponent());
-    }
-
-    public void setUniform(String name, SpotLight[] spotLights) {
-        if (spotLights == null || spotLights.length == 0) {
-            return;
-        }
-
-        for (int i = 0; i < spotLights.length; i++) {
-            setUniform(name + "[" + i + "]", spotLights[i]);
-        }
     }
 
     public void setUniform(String name, SpotLight spotLight) {

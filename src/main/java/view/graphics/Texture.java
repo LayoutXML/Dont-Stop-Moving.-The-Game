@@ -43,7 +43,6 @@ public class Texture {
             yBuffer = memoryStack.mallocInt(2);
             channelsBuffer = memoryStack.mallocInt(1);
 
-            byteBuffer = null;
             if (fileName != null && !fileName.isEmpty()) {
                 byteBuffer = stbi_load(fileName, xBuffer, yBuffer, channelsBuffer, 4);
             } else {
@@ -61,20 +60,13 @@ public class Texture {
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        
+
         glBindTexture(GL_TEXTURE_2D, id);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, xBuffer.get(), yBuffer.get(), 0, GL_RGBA, GL_UNSIGNED_BYTE, byteBuffer);
         glGenerateMipmap(GL_TEXTURE_2D);
 
         stbi_image_free(byteBuffer);
-    }
-
-    public void bind() throws ResourceException {
-        if (id == 0) {
-            throw new ResourceException("Texture binding error");
-        }
-        glBindTexture(GL_TEXTURE_2D, id);
     }
 
     public void free() {

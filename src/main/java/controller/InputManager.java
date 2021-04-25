@@ -13,7 +13,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 @Getter
 public class InputManager {
-    public static final boolean FLYING_ALLOWED = true;
+    public static final boolean FLYING_ALLOWED = false;
 
     private static final int KEY_FORWARD = GLFW_KEY_W;
     private static final int KEY_BACKWARD = GLFW_KEY_S;
@@ -74,8 +74,6 @@ public class InputManager {
     }
 
     public void updateMovementDirection(Window window, Vector3f movementDirection, Vector3f positionDelta) {
-        Vector3f previousMovementDirection = new Vector3f(movementDirection);
-
         movementDirection.set(0, 0, 0);
 
         if (isKeyPressed(window, KEY_FORWARD)) {
@@ -106,7 +104,7 @@ public class InputManager {
     }
 
     public boolean isJumping(Window window) {
-        return isKeyPressed(window, KEY_JUMP); // TODO: refactor to a list of actions - jump, restart, etc
+        return isKeyPressed(window, KEY_JUMP);
     }
 
     public boolean isRestart(Window window) {
@@ -117,7 +115,7 @@ public class InputManager {
         return isKeyPressed(window, KEY_EXIT);
     }
 
-    public boolean isKeyPressed(Window window, int key) {
+    private boolean isKeyPressed(Window window, int key) {
         if (window == null) {
             return false;
         }

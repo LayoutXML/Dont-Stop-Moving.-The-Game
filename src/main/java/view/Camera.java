@@ -41,18 +41,7 @@ public class Camera {
         this.position.z = position.z;
     }
 
-    public void setPositionFromCoordinates(float x, float y, float z) {
-        position.x = x;
-        position.y = y;
-        position.z = z;
-    }
-
-    public void setRotationFromCoordinates(float x, float y, float z) {
-        rotation.x = x;
-        rotation.y = y;
-        rotation.z = z;
-    }
-
+    // Update method design pattern
     public CameraUpdateWrapper update(Vector3f movementDirection, Vector2f displayRotation, boolean jump, Level level) {
         if (!level.isLevelLoaded()) {
             return new CameraUpdateWrapper();

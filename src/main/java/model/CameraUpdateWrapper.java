@@ -12,9 +12,9 @@ import org.joml.Vector3f;
 @AllArgsConstructor
 public class CameraUpdateWrapper {
     @Builder.Default
-    private Vector3f positionDelta = new Vector3f();
+    private final Vector3f positionDelta = new Vector3f();
     @Builder.Default
-    private boolean win = false;
+    private final boolean win = false;
     @Builder.Default
-    private boolean positionReset = false;
+    private final boolean positionReset = false;
 }

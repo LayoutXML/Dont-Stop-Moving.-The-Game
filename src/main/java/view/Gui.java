@@ -13,8 +13,8 @@ import java.io.IOException;
 
 public class Gui {
     public static final String NAME = "Don't stop moving!";
-    private int width = 1280;
-    private int height = 720;
+    public static final int WIDTH = 1280;
+    public static final int HEIGHT = 720;
     private JFrame frame;
 
     public Gui() {
@@ -36,13 +36,13 @@ public class Gui {
         gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
 
         JLabel title = new JLabel(NAME, SwingConstants.CENTER);
-        title.setBounds(width / 2 - 320, height / 4 - 64, 640, 128);
+        title.setBounds(WIDTH / 2 - 320, HEIGHT / 4 - 64, 640, 128);
         title.setFont(new Font("Corbel", Font.PLAIN, 64));
         title.setForeground(Color.WHITE);
         frame.add(title, gridBagConstraints);
 
         JButton button = new JButton("Start");
-        button.setBounds(width / 2 - 64, height / 2 - 32, 128, 64);
+        button.setBounds(WIDTH / 2 - 64, HEIGHT / 2 - 32, 128, 64);
         button.addActionListener(event -> startButtonPressed());
         button.setFont(new Font("Corbel", Font.PLAIN, 32));
         button.setForeground(Color.GREEN);
@@ -52,7 +52,7 @@ public class Gui {
         frame.add(button);
 
         frame.setTitle(NAME);
-        frame.setSize(width, height);
+        frame.setSize(WIDTH, HEIGHT);
         frame.setLayout(null);
         frame.setVisible(true);
         frame.setResizable(false);
