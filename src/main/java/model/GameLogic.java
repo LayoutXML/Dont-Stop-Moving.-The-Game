@@ -7,6 +7,8 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import view.*;
 
+import javax.swing.*;
+
 public class GameLogic {
     private final Window window = new Window();
     private final RenderEngine renderEngine = new RenderEngine();
@@ -20,6 +22,8 @@ public class GameLogic {
 
     private boolean jump = false;
     private boolean exit = false;
+    private boolean win = false;
+    private boolean showingResults = false;
 
     private Level level;
     private Status status;
@@ -53,11 +57,21 @@ public class GameLogic {
     }
 
     public void update() throws ResourceException, InitializationException {
-        CameraUpdateWrapper cameraUpdate = camera.update(movementDirection, displayRotation, jump, level);
-        positionDelta = cameraUpdate.getPositionDelta();
-        level.update(camera.getPosition());
-        status.update(camera.getPosition(), level, cameraUpdate.isPositionReset());
-        soundManager.update(cameraUpdate.isWin(), level);
+        if (!win) {
+            CameraUpdateWrapper cameraUpdate = camera.update(movementDirection, displayRotation, jump, level);
+            positionDelta = cameraUpdate.getPositionDelta();
+            level.update(camera.getPosition());
+            status.update(camera.getPosition(), level, cameraUpdate.isPositionReset());
+            soundManager.update(cameraUpdate.isWin(), level);
+            win = cameraUpdate.isWin();
+        } else if (!showingResults) {
+            showResults(status.getTimerText().getText());
+        }
+    }
+
+    private void showResults(String time) {
+        JOptionPane.showMessageDialog(new JFrame(), "Congratulations! Your time: " + time, "Congratulations!", JOptionPane.PLAIN_MESSAGE);
+        exit = true;
     }
 
     public void render() {
