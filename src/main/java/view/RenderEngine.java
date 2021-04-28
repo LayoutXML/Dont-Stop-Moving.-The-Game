@@ -150,6 +150,8 @@ public class RenderEngine {
 
         statusShader.bind();
 
+        transformation.getStatusProjectionMatrix(0, window.getWidth(), window.getHeight(), 0);
+
         for (TextItem gameItem : status.getGameItems()) {
             Mesh mesh = gameItem.getMesh();
             Matrix4f matrix = transformation.getStatusMatrix(gameItem);
