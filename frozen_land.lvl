@@ -386,7 +386,6 @@ BRICK_GRAY 19.25 5.25 8 0 0 0 0.5
 BRICK_GRAY 19.25 5.75 8 0 0 0 0.5
 
 // props
-//Prop_well_1 10.5 4 7 0 0 0
 
 // Wall 1
 Stone_Wall_1 5 0 6 0 180 0
@@ -1411,3 +1410,37 @@ Stone_Floor_1 23 5 18 0 0 0
 Stone_Floor_1 24 5 16 0 0 0
 Stone_Floor_1 24 5 17 0 0 0
 Stone_Floor_1 24 5 18 0 0 0
+
+// Props 2
+Prop_Well_1 13 5 9 0 0 0 2
+Prop_Barrel_1 11 5 8 0 0 0 2
+Prop_Barrel_1 12 5.5 8.5 90 45 0 2
+
+Prop_Well_1 3.5 5 -2 0 90 0 2
+Prop_Barrel_1 6.4 5 -2.5 0 0 0 2
+Prop_Barrel_1 6 5 -1.5 0 0 0 2
+Prop_Barrel_1 6 6 -2 0 0 0 2
+
+Prop_Lamp_Street 6.7 5 5.7 0 0 0 2
+Prop_Lamp_Street 5.7 5 6.7 0 90 0 2
+
+Prop_Lamp_Street 4.7 5 15.7 0 180 0 2
+Prop_Lamp_Street 5.7 5 14.7 0 270 0 2
+
+Prop_Lamp_Street 20.7 5 15.7 0 180 0 2
+Prop_Lamp_Street 21.7 5 14.7 0 270 0 2
+
+Prop_Lamp_Street 14.3 5 5.7 0 180 0 2
+Prop_Lamp_Street 15.3 5 6.7 0 90 0 2
+
+Prop_Lamp_Street 16.3 5 15.7 0 0 0 2
+Prop_Lamp_Street 15.3 5 14.7 0 270 0 2
+
+Prop_Lamp_Street 0.3 5 15.7 0 0 0 2
+Prop_Lamp_Street -0.7 5 14.7 0 270 0 2
+
+Prop_Lamp_Street 0.3 5 -0.7 0 0 0 2
+Prop_Lamp_Street -0.7 5 0.3 0 90 0 2
+
+Prop_Lamp_Street 20.7 5 -0.7 0 180 0 2
+Prop_Lamp_Street 21.7 5 0.3 0 90 0 2
