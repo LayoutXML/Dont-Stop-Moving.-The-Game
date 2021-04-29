@@ -9,6 +9,7 @@ import org.joml.Vector4f;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Material {
+    // Color: percentage based RGB (hex/255) + transparency
     private static final Vector4f DEFAULT_COLOR = new Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
 
     @Builder.Default

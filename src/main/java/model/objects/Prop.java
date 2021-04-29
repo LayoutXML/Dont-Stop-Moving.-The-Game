@@ -19,9 +19,9 @@ public class Prop extends GameItem {
     public Prop(String name) throws ResourceException {
         super("/props/" + name + ".obj", Material.builder()
                 .reflectance(10f)
-                .ambient(new Vector4f(0.1f, 0.2f, 0.3f, 1f))
-                .diffuse(new Vector4f(0.1f, 0.2f, 0.3f, 1f))
-                .specular(new Vector4f(0.1f, 0.2f, 0.3f, 1f))
+                .ambient(new Vector4f(0.18f, 0.46f, 0.8f, 1f))
+                .diffuse(new Vector4f(0.18f, 0.46f, 0.8f, 1f))
+                .specular(new Vector4f(0.18f, 0.46f, 0.8f, 1f))
                 .build());
     }
 
