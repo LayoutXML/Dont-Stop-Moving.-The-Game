@@ -64,7 +64,7 @@ public class GameLogic {
             status.update(camera.getPosition(), level, cameraUpdate.isPositionReset());
             soundManager.update(cameraUpdate.isWin(), level);
             win = cameraUpdate.isWin();
-        } else {
+        } else if (!exit) {
             showResults(status.getTimerText().getText());
         }
     }
