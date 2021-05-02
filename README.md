@@ -1,5 +1,7 @@
 # Don't stop moving! The game
 
+<img src="https://raw.githubusercontent.com/LayoutXML/Dont-Stop-Moving.-The-Game/master/screenshot.png" alt="Game Screenshot">
+
 The village has been turned to ice by an evil witch who has also set up traps along the track to catch her. Avoid the obstacles and reach the end of the level in order to rescue people of the frozen land.
 
 ## Controls
